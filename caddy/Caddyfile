@@ -4,8 +4,8 @@
 
 :8081 {
     @honeypot {
-        /sicily/*
-        /asia/*
+        path_regexp /sicily/*
+        path_regexp /asia/*
     }
 
     handle @honeypot {
