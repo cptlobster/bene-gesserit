@@ -38,7 +38,7 @@ services:
     # you should make sure port 9090 is only accessible from trusted sources
     # this configuration makes it only available to localhost
     ports:
-      - 127.0.0.1:9090:9090
+      - 9090:9090
     # make metrics data persistent
     volumes:
       - "./metrics/prometheus.yml:/etc/prometheus/prometheus.yml"
