@@ -1,7 +1,11 @@
+@honeypot expression path_regexp('/sicily/*')
+
 :8080 {
     reverse_proxy http://anubis:8080
 }
+
 :8081 {
-    reverse_proxy /sicily/* http://iocaine:42069
+    reverse_proxy @honeypot http://iocaine:42069
+    file_server /robots.txt /etc/caddy/robots.txt
     reverse_proxy http://example:80
 }
