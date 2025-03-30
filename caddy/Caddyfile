@@ -1,4 +1,4 @@
-@honeypot expression path_regexp('/sicily/*')
+@honeypot expression path_regexp('/sicily/*') || path_regexp('/asia/*')
 
 :8080 {
     reverse_proxy http://anubis:8080

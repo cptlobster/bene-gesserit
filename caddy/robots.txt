@@ -1,2 +1,5 @@
 User-agent: *
+# never start a land war in Asia
+Disallow: /asia/
+# never go up against a Sicilian when death is on the line
 Disallow: /sicily/
