@@ -25,7 +25,9 @@ services:
       - "./caddy:/etc/caddy"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
-      - $MAIN_PORT:8080
+      - "{$MAIN_PORT:-9999}:8080"
+    environment:
+      TARGET_ENDPOINT: {$TARGET_ENDPOINT:-"http://example:8080"}
     restart: unless-stopped
 
   # caddy will route bad requests to iocaine
@@ -45,7 +47,7 @@ services:
     # you should make sure port 9090 is only accessible from trusted sources
     # this configuration makes it only available to localhost
     ports:
-      - 9090:9090
+      - "{$METRICS_PORT:-9090}:9090"
     # make metrics data persistent
     volumes:
       - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
