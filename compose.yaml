@@ -21,7 +21,7 @@ services:
     volumes:
       - "./anubis/botPolicy.json:/data/cfg/botPolicy.json:ro"
     restart: unless-stopped
-  # once they succeed, they will go to nginx
+  # once they succeed, they will go to nginx for further routing
   nginx:
     image: nginx
     restart: unless-stopped

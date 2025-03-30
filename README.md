@@ -1,6 +1,19 @@
 # antiscraper
 This project provides a fully self-hosted comprehensive solution for defending against AI scrapers, and actively poisoning particularly persistent ones.
 
+Configurations are provided in the following formats:
+- Docker Compose
+
+More configuration formats may be added (i.e. Helm chart, Nix derivation) at a later date.
+
+## Deploying
+
+### Docker Compose
+
+```sh
+docker compose up -d
+```
+
 ## Architecture
 
 ```mermaid
