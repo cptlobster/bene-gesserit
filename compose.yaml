@@ -15,6 +15,7 @@ services:
     volumes:
       - "./anubis/botPolicy.json:/data/cfg/botPolicy.json:ro"
     restart: unless-stopped
+
   # once they succeed, they will go to caddy for further routing
   proxy:
     image: caddy
@@ -24,6 +25,7 @@ services:
     ports:
       - $MAIN_PORT:8080
     restart: unless-stopped
+
   # caddy will route bad requests to iocaine
   iocaine:
     image: git.madhouse-project.org/iocaine/iocaine:latest
@@ -32,7 +34,8 @@ services:
       - "./iocaine/data:/data"
       - "./iocaine/config.toml:/etc/iocaine/config.toml:ro"
     command: "--config-file /etc/iocaine/config.toml"
-  # Prometheus will collect metrics from all of the other services.
+
+  # Prometheus will collect metrics from all of the other services...
   prometheus:
     image: prom/prometheus
     # you should make sure port 9090 is only accessible from trusted sources
@@ -48,6 +51,11 @@ services:
       - "--storage.tsdb.path=/data"
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
+
+  # ...and Grafana will provide a nice dashboard
+  # grafana:
+  #   image: grafana
+
   # a simple example service that we want to protect
   example:
     image: httpd:2.4

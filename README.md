@@ -23,31 +23,40 @@ graph TD
 
     subgraph AS[antiscraper collection]
         ANU[Anubis]
-        NGX[Nginx proxy]
+        CAD[Caddy]
+        subgraph CAD[Caddy]
+            PUB[Public Proxy]
+            PRV[Private Proxy]
+        end
         IOC[Iocaine]
 
         PROM[(Prometheus)]
+        GRF[Grafana]
     end
 
     SVC[Your service]
 
-    EXT --> ANU
+    EXT --> PUB
+    PUB --> ANU
     INT --> SVC
-    ANU -->|Challenge passed| NGX
-    NGX -->|Legitimate endpoints| SVC
-    NGX -->|Honeypot endpoints| IOC
+    ANU -->|Challenge passed| PRV
+    PRV -->|Legitimate endpoints| SVC
+    PRV -->|Honeypot endpoints| IOC
 
     ANU & IOC -.->|Metrics| PROM
+    PROM --> GRF
+    INT --> GRF
+    INT --> PROM
 ```
 
 A client will follow this basic flow through the system:
 1. New clients will receive a challenge from [Anubis](https://anubis.techaro.lol/)
-2. Successful clients will be passed through to an Nginx reverse proxy that will handle specific endpoint queries.
-3. The Nginx proxy will provide a `robots.txt` file that offers a set of "honeypot" endpoints marked as unallowed.
+2. Successful clients will be passed through to a Caddy reverse proxy that will handle specific endpoint queries.
+3. The Caddy proxy will provide a `robots.txt` file that offers a set of "honeypot" endpoints marked as unallowed.
    - If the client hits one of those honeypot endpoints, they will be redirected to a tarpit served by [iocaine](https://iocaine.madhouse-project.org/)
 4. All remaining clients will be passed through to your service.
 
-Services will provide Prometheus metrics (either internally or to an external instance of your choice) so you can see which scrapers are being caught / where they are being sent.
+Services will provide Prometheus metrics (either internally or to an external instance of your choice) so you can see which scrapers are being caught / where they are being sent. You can also include an internal Grafana dashboard for viewing metrics, or use an existing Grafana instance.
 
 ## License
 This project is licensed under the [GNU General Public License, version 3](LICENSE.md).
