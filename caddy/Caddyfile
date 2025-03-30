@@ -2,5 +2,6 @@
     reverse_proxy http://anubis:8080
 }
 :8081 {
+    reverse_proxy /sicily/* http://iocaine:42069
     reverse_proxy http://example:80
 }
