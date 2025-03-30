@@ -1,0 +1,45 @@
+# antiscraper docker compose configuration.
+environment:
+  INCOMING_PORT: 8080
+  OUTGOING_ADDR: "http://localhost:8081"
+services:
+  # incoming connections will be routed through anubis
+  anubis:
+    image: ghcr.io/techarohq/anubis:latest
+    environment:
+      # Port for incoming traffic
+      BIND: ":8080"
+      DIFFICULTY: "5"
+      METRICS_BIND: ":9090"
+      SERVE_ROBOTS_TXT: "false" # we'll use nginx + iocaine for that
+      # Target for accepted connections
+      TARGET: "http://nginx:8080"
+      POLICY_FNAME: "/data/cfg/botPolicy.json"
+    # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
+    ports:
+      - $MAIN_PORT:8080
+    volumes:
+      - "./anubis/botPolicy.json:/data/cfg/botPolicy.json:ro"
+    restart: unless-stopped
+  # once they succeed, they will go to nginx
+  nginx:
+    image: nginx
+    restart: unless-stopped
+  # nginx will route bad requests to iocaine
+  iocaine:
+    image: git.madhouse-project.org/iocaine/iocaine:latest
+    restart: unless-stopped
+    volumes:
+      - "./iocaine/data:/data"
+      - "./iocaine/config.toml:/etc/iocaine/config.toml:ro"
+    command: "--config-file /etc/iocaine/config.toml"
+  # Prometheus will collect metrics from all of the other services.
+  metrics:
+    image: prom/prometheus
+    # you should make sure port 9090 is only accessible from trusted sources
+    # this configuration makes it only available to localhost
+    ports:
+      - 127.0.0.1:9090:9090
+    # make metrics data persistent
+    volumes:
+      - "./prometheus/data:./data"

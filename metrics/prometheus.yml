@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s
+
+# scrape endpoints for our services
+scrape_configs:
+  - job_name: 'anubis'
+    static_configs:
+      - targets: ['anubis:9090']
+  - job_name: 'iocaine'
+    static_configs:
+      - targets: ['iocaine:42042']
