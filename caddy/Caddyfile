@@ -3,14 +3,17 @@
 }
 
 :8081 {
-    @honeypot expression path_regexp('/sicily/*') || path_regexp('/asia/*')
-    
+    @honeypot {
+        /sicily/*
+        /asia/*
+    }
+
     handle @honeypot {
         reverse_proxy http://iocaine:42069
     }
 
-    handle_path /robots.txt {
-        root * /etc/caddy
+    handle /robots.txt {
+        root * /etc/caddy/static
         file_server
     }
 
