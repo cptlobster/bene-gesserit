@@ -52,4 +52,4 @@ services:
   example:
     image: httpd:2.4
     volumes:
-      - "./example:/usr/local/apache2/htdocs:ro"
+      - "./example/:/usr/local/apache2/htdocs/"
