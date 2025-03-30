@@ -10,7 +10,7 @@
     }
 
     handle /robots.txt {
-        file_server /etc/caddy
+        file_server /etc/caddy/robots.txt
     }
 
     handle {
