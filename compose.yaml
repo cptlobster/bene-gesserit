@@ -33,7 +33,7 @@ services:
       - "./iocaine/config.toml:/etc/iocaine/config.toml:ro"
     command: "--config-file /etc/iocaine/config.toml"
   # Prometheus will collect metrics from all of the other services.
-  metrics:
+  prometheus:
     image: prom/prometheus
     # you should make sure port 9090 is only accessible from trusted sources
     # this configuration makes it only available to localhost
@@ -41,11 +41,11 @@ services:
       - 9090:9090
     # make metrics data persistent
     volumes:
-      - "./metrics/prometheus.yml:/etc/prometheus/prometheus.yml"
-#      - "./metrics/data:/data"
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "prometheus_data:/data"
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-#      - "--storage.tsdb.path=/data"
+      - "--storage.tsdb.path=/data"
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
   # a simple example service that we want to protect
@@ -53,3 +53,6 @@ services:
     image: httpd:2.4
     volumes:
       - "./example/:/usr/local/apache2/htdocs/"
+
+volumes:
+  prometheus_data:
