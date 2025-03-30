@@ -1,5 +1,5 @@
 :8080 {
-    reverse_proxy http://anubis:8080
+    reverse_proxy {$ANUBIS_ENDPOINT}
 }
 
 :8081 {
@@ -9,7 +9,7 @@
     }
 
     handle @honeypot {
-        reverse_proxy http://iocaine:42069
+        reverse_proxy {$IOCAINE_ENDPOINT}
     }
 
     handle /robots.txt {
@@ -18,6 +18,6 @@
     }
 
     handle {
-        reverse_proxy http://example:80
+        reverse_proxy {$TARGET_ENDPOINT}
     }
 }

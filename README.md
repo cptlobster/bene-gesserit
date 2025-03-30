@@ -14,6 +14,14 @@ More configuration formats may be added (i.e. Helm chart, Nix derivation) at a l
 docker compose up -d
 ```
 
+#### Configuration
+
+| Environment Variable | Description | Default Value |
+|---|---|---|
+| `TARGET_URL` | The final service endpoint you intend to access. This is a local IP address within your Compose network. | `http://example:8080` |
+| `MAIN_PORT` | The port that all incoming traffic will be routed in from. This will be the port that you direct public traffic to. | `9999` |
+| `METRICS_PORT` | The port that Prometheus metrics will be served from. | `9090` |
+
 ## Architecture
 
 ```mermaid
