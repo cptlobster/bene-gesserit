@@ -6,7 +6,7 @@ services:
     environment:
       # Port for incoming traffic
       BIND: ":8080"
-      DIFFICULTY: "5"
+      DIFFICULTY: "1"
       METRICS_BIND: ":9090"
       SERVE_ROBOTS_TXT: "false" # we'll use nginx + iocaine for that
       # Target for accepted connections
