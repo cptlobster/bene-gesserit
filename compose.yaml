@@ -29,6 +29,7 @@ services:
     environment:
       TARGET_ENDPOINT: "${TARGET_ENDPOINT:-http://example:8080}"
       IOCAINE_ENDPOINT: "http://iocaine:42069"
+      ANUBIS_ENDPOINT: "http://anubis:8080"
     restart: unless-stopped
 
   # caddy will route bad requests to iocaine
