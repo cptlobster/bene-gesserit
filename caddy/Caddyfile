@@ -9,8 +9,9 @@
         reverse_proxy http://iocaine:42069
     }
 
-    handle /robots.txt {
-        file_server /etc/caddy/robots.txt
+    handle_path /robots.txt {
+        root * /etc/caddy
+        file_server
     }
 
     handle {
