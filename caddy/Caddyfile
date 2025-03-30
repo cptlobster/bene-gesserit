@@ -1,0 +1,6 @@
+:8080 {
+    reverse_proxy http://anubis:8080
+}
+:8081 {
+    reverse_proxy http://example:8080
+}
