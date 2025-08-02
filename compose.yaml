@@ -15,8 +15,6 @@ services:
     volumes:
       - "./anubis/botPolicy.json:/data/cfg/botPolicy.json:ro"
     restart: unless-stopped
-    depends_on:
-      - proxy
 
   # once they succeed, they will go to caddy for further routing
   proxy:
@@ -31,17 +29,18 @@ services:
       IOCAINE_ENDPOINT: "http://iocaine:42069"
       ANUBIS_ENDPOINT: "http://anubis:8080"
     restart: unless-stopped
+    depends_on:
+      - iocaine
+      - anubis
 
   # caddy will route bad requests to iocaine
   iocaine:
-    image: git.madhouse-project.org/iocaine/iocaine:1.1.0
+    image: git.madhouse-project.org/iocaine/iocaine:2.5.0
     restart: unless-stopped
     volumes:
-      - "./iocaine/data:/data"
+      - "./iocaine/corpus:/etc/iocaine/corpus"
       - "./iocaine/config.toml:/etc/iocaine/config.toml:ro"
     command: "--config-file /etc/iocaine/config.toml"
-    depends_on:
-      - proxy
 
 #   # Prometheus will collect metrics from all of the other services...
 #   prometheus:
