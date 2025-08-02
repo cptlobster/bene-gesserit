@@ -20,12 +20,12 @@ services:
 
   # once they succeed, they will go to caddy for further routing
   proxy:
-    image: caddy
+    image: openresty/openresty
     volumes:
-      - "./caddy:/etc/caddy"
+      - "./openresty/nginx.conf.d:/etc/nginx/conf.d"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
-      - "${MAIN_PORT:-9999}:8080"
+      - "${MAIN_PORT:-9999}:80"
     environment:
       TARGET_ENDPOINT: "${TARGET_ENDPOINT:-http://example:80}"
       IOCAINE_ENDPOINT: "http://iocaine:42069"
@@ -34,7 +34,7 @@ services:
 
   # caddy will route bad requests to iocaine
   iocaine:
-    image: git.madhouse-project.org/iocaine/iocaine:latest
+    image: git.madhouse-project.org/iocaine/iocaine:1.1.0
     restart: unless-stopped
     volumes:
       - "./iocaine/data:/data"
@@ -43,25 +43,25 @@ services:
     depends_on:
       - proxy
 
-  # Prometheus will collect metrics from all of the other services...
-  prometheus:
-    image: prom/prometheus
-    # you should make sure port 9090 is only accessible from trusted sources
-    # this configuration makes it only available to localhost
-    ports:
-      - "${METRICS_PORT:-9090}:9090"
-    # make metrics data persistent
-    volumes:
-      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
-#      - "prometheus_data:/data"
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-#      - "--storage.tsdb.path=/data"
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    depends_on:
-      - anubis
-      - iocaine
+#   # Prometheus will collect metrics from all of the other services...
+#   prometheus:
+#     image: prom/prometheus
+#     # you should make sure port 9090 is only accessible from trusted sources
+#     # this configuration makes it only available to localhost
+#     ports:
+#       - "${METRICS_PORT:-9090}:9090"
+#     # make metrics data persistent
+#     volumes:
+#       - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+# #      - "prometheus_data:/data"
+#     command:
+#       - "--config.file=/etc/prometheus/prometheus.yml"
+# #      - "--storage.tsdb.path=/data"
+#       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+#       - '--web.console.templates=/usr/share/prometheus/consoles'
+#     depends_on:
+#       - anubis
+#       - iocaine
 
   # ...and Grafana will provide a nice dashboard
   # grafana:
