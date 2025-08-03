@@ -1,5 +1,6 @@
 local _M = {}
 
+-- Check if a client endpoint is a honeypot
 function _M.is_honeypot(ngx)
     local file_path = "/etc/nginx/bg_conf/honeypots"
     local file, err = io.open(file_path, "r")

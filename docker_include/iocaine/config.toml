@@ -3,7 +3,7 @@ bind = "0.0.0.0:42069"
 
 [sources]
 words = "/etc/iocaine/corpus/bee-movie.txt"
-markov = ["/etc/iocaine/corpus/bee-movie.txt"]
+markov = [ "/etc/iocaine/corpus/bee-movie.txt" ]
 
 [metrics]
 enable = true
