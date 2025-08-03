@@ -22,6 +22,7 @@ services:
     volumes:
       - "./openresty/nginx.conf.d:/etc/nginx/conf.d"
       - "./openresty/bg_conf:/etc/nginx/bg_conf"
+      - "./openresty/lua:/etc/nginx/lua"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
       - "${MAIN_PORT:-9999}:80"
