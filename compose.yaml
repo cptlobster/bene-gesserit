@@ -21,7 +21,7 @@ services:
     image: openresty/openresty
     volumes:
       - "./docker_include/openresty/nginx.conf.d:/etc/nginx/conf.d"
-      - "./docker_include/openresty/bg_conf:/etc/nginx/bg_conf"
+      - "./docker_include/openresty/bg_conf:/etc/nginx/bg_conf:rw"
       - "./docker_include/openresty/lua:/etc/nginx/lua"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
