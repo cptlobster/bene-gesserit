@@ -11,9 +11,9 @@ services:
       SERVE_ROBOTS_TXT: "false" # we'll use nginx + iocaine for that
       # Target for accepted connections
       TARGET: "http://proxy:8081"
-      POLICY_FNAME: "/data/cfg/botPolicy.json"
+      POLICY_FNAME: "/tmp/botPolicy.json"
     volumes:
-      - "./anubis/botPolicy.json:/data/cfg/botPolicy.json:ro"
+      - "./anubis/botPolicy.json:/tmp/botPolicy.json:ro"
     restart: unless-stopped
 
   # once they succeed, they will go to caddy for further routing
@@ -21,6 +21,7 @@ services:
     image: openresty/openresty
     volumes:
       - "./openresty/nginx.conf.d:/etc/nginx/conf.d"
+      - "./openresty/bg_conf:/etc/nginx/bg_conf"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
       - "${MAIN_PORT:-9999}:80"
