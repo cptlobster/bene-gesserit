@@ -13,16 +13,16 @@ services:
       TARGET: "http://proxy:8081"
       POLICY_FNAME: "/tmp/botPolicy.json"
     volumes:
-      - "./anubis/botPolicy.json:/tmp/botPolicy.json:ro"
+      - "./docker_include/anubis/botPolicy.json:/tmp/botPolicy.json:ro"
     restart: unless-stopped
 
   # once they succeed, they will go to caddy for further routing
   proxy:
     image: openresty/openresty
     volumes:
-      - "./openresty/nginx.conf.d:/etc/nginx/conf.d"
-      - "./openresty/bg_conf:/etc/nginx/bg_conf"
-      - "./openresty/lua:/etc/nginx/lua"
+      - "./docker_include/openresty/nginx.conf.d:/etc/nginx/conf.d"
+      - "./docker_include/openresty/bg_conf:/etc/nginx/bg_conf"
+      - "./docker_include/openresty/lua:/etc/nginx/lua"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
       - "${MAIN_PORT:-9999}:80"
@@ -40,29 +40,29 @@ services:
     image: git.madhouse-project.org/iocaine/iocaine:2.5.0
     restart: unless-stopped
     volumes:
-      - "./iocaine/corpus:/etc/iocaine/corpus"
-      - "./iocaine/config.toml:/etc/iocaine/config.toml:ro"
+      - "./docker_include/iocaine/corpus:/etc/iocaine/corpus"
+      - "./docker_include/iocaine/config.toml:/etc/iocaine/config.toml:ro"
     command: "--config-file /etc/iocaine/config.toml"
 
-#   # Prometheus will collect metrics from all of the other services...
-#   prometheus:
-#     image: prom/prometheus
-#     # you should make sure port 9090 is only accessible from trusted sources
-#     # this configuration makes it only available to localhost
-#     ports:
-#       - "${METRICS_PORT:-9090}:9090"
-#     # make metrics data persistent
-#     volumes:
-#       - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
-# #      - "prometheus_data:/data"
-#     command:
-#       - "--config.file=/etc/prometheus/prometheus.yml"
-# #      - "--storage.tsdb.path=/data"
-#       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-#       - '--web.console.templates=/usr/share/prometheus/consoles'
-#     depends_on:
-#       - anubis
-#       - iocaine
+  # Prometheus will collect metrics from all of the other services...
+  prometheus:
+    image: prom/prometheus
+    # you should make sure port 9090 is only accessible from trusted sources
+    # this configuration makes it only available to localhost
+    ports:
+      - "${METRICS_PORT:-9090}:9090"
+    # make metrics data persistent
+    volumes:
+      - "./docker_include/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+#      - "prometheus_data:/data"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+#      - "--storage.tsdb.path=/data"
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    depends_on:
+      - anubis
+      - iocaine
 
   # ...and Grafana will provide a nice dashboard
   # grafana:
