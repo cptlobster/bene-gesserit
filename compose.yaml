@@ -20,9 +20,7 @@ services:
   proxy:
     image: openresty/openresty
     volumes:
-      - "./docker_include/openresty/nginx.conf.d:/etc/nginx/conf.d"
-      - "./docker_include/openresty/bg_conf:/etc/nginx/bg_conf:rw"
-      - "./docker_include/openresty/lua:/etc/nginx/lua"
+      - "./docker_include/openresty:/etc/nginx"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
       - "${MAIN_PORT:-9999}:80"
