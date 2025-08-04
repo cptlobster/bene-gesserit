@@ -1,0 +1,12 @@
+[server]
+bind = "0.0.0.0:42069"
+
+[sources]
+words = "{{ config.labyrinth.base_path }}{{ config.labyrinth.words }}"
+markov = [ {% for file_name in config.labyrinth.corpus -%} "{{ config.labyrinth.base_path }}{{file_name}}" {%- if not loop.last -%} , {% endif %} {%- endfor %} ]
+
+{% if config.metrics.enabled -%}
+[metrics]
+enable = true
+bind = "0.0.0.0:42042"
+{% endif %}

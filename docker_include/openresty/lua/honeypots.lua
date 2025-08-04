@@ -12,10 +12,12 @@ function _M.is_honeypot(ngx)
     local is_honeypot = false
     local uri = ngx.var.uri
     for line in file:lines() do
-        ngx.log(ngx.INFO, "checking ", line)
-        if uri:match(line) then
-            ngx.log(ngx.INFO, "matched! path: ", line)
-            is_honeypot = true
+        if (line != "") then
+            ngx.log(ngx.INFO, "checking ", line)
+            if uri:match(line) then
+                ngx.log(ngx.INFO, "matched! path: ", line)
+                is_honeypot = true
+            end
         end
     end
     io.close(file)

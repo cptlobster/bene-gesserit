@@ -29,10 +29,13 @@ This will be automated in a future commit.
 ### Docker Compose
 
 ```sh
+cargo run
 docker compose up -d
 ```
 
 #### Configuration
+
+Configuration is set in the `config.toml` at the root of the repository. See the `config` Rust module for more information on all available parameters, or the example config file.
 
 Some configuration can be set via environment variables.
 
@@ -99,9 +102,9 @@ A client will follow this basic flow through the system:
     - [ ] Permanently redirect all client queries to Iocaine if they trigger honeypots/ratelimit too many times
 - [ ] Configuration Simplification
   - [ ] Get environment variable configuration working in OpenResty for endpoint URLs
-  - [ ] Generate honeypot list from central config file
-  - [ ] Generate OpenResty config from environment variables or central config file
-  - [ ] Generate Iocaine config (i.e. corpus file locations) from central config file
+  - [x] Generate honeypot list from central config file
+  - [x] Generate OpenResty config from environment variables or central config file
+  - [x] Generate Iocaine config (i.e. corpus file locations) from central config file
   - [ ] Provide default "library" options for markov chain corpus (list of files to curl on container start? something like that)
 - [ ] Metrics
   - [x] Connect Anubis to Prometheus

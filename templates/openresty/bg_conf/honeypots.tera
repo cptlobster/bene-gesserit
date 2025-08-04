@@ -1,0 +1,3 @@
+{% for pattern in config.honeypot.endpoints -%}
+{{ pattern }}
+{% endfor %}

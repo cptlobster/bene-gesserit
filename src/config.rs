@@ -3,9 +3,12 @@ use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Config {
     endpoints: EndpointConfig,
+    #[serde(default)]
     honeypot: Option<HoneypotConfig>,
+    #[serde(default)]
     ratelimit: Option<RatelimitConfig>,
-    labyrinth: LabyrinthConfig
+    labyrinth: LabyrinthConfig,
+    metrics: MetricsConfig
 }
 
 #[derive(Serialize, Deserialize)]
@@ -35,6 +38,7 @@ pub struct LabyrinthConfig {
 
 #[derive(Serialize, Deserialize)]
 pub struct IocaineMixins {
+    base_path: String,
     corpus: Vec<String>,
     words: String
 }
@@ -50,4 +54,9 @@ pub enum RatelimitRule {
         unique: u32,
         seconds: u32
     }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct MetricsConfig {
+    enabled: bool
 }

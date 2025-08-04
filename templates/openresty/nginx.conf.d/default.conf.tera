@@ -9,13 +9,13 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
     location / {
-        proxy_pass http://anubis:8080;
+        proxy_pass {{ config.endpoints.anubis }};
         proxy_intercept_errors on;
         error_page 421 @ioc;
     }
 
     location @ioc {
-        proxy_pass http://iocaine:42069;
+        proxy_pass {{ config.endpoints.iocaine }};
     }
 }
 
@@ -25,13 +25,13 @@ server {
     resolver 127.0.0.11 valid=30s;
 
     location / {
-        set $upstream_target http://example:80;
+        set $upstream_target {{ config.endpoints.target }};
 
         rewrite_by_lua_block {
             local honeypots = require "honeypots"
 
             if honeypots.is_honeypot(ngx) then
-                ngx.var.upstream_target = "http://iocaine:42069"
+                ngx.var.upstream_target = "{{ config.endpoints.iocaine }}"
             end
         }
 

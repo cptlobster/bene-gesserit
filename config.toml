@@ -1,0 +1,22 @@
+[endpoints]
+target = "http://target:80"
+iocaine = "http://iocaine:42069"
+anubis = "http://anubis:8080"
+internal = "http://proxy:8081"
+
+[honeypot]
+endpoints = [
+    "^/sicily",
+    "^/asia"
+]
+
+[labyrinth]
+banish_threshold = 3
+base_path = "/etc/iocaine/"
+corpus = [
+    "corpus/bee-movie.txt"
+]
+words = "corpus/bee-movie.txt"
+
+[metrics]
+enabled = true
