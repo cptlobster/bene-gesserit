@@ -21,7 +21,10 @@ pub fn get_one(src: &CorpusSrc, target_dir: &PathBuf) -> Result<(), BGError> {
 fn get(client: &Client, src: &CorpusSrc, target_dir: &PathBuf) -> Result<(), BGError> {
     let target_path = gen_path(src, target_dir);
     log::debug!("Downloading {:?} to {}", src, &target_path.to_str().unwrap());
-    if target_path.exists() { Ok(()) } else {
+    if target_path.exists() { 
+        log::debug!("{:?} already exists. Skipping...", src);
+        Ok(()) 
+    } else {
         match src {
             CorpusSrc::Url(path) => download(client, path.as_str())
                 .and_then(|content| save(content, &target_path)),
@@ -45,8 +48,8 @@ fn download(client: &Client, src: &str) -> Result<String, BGError> {
             Ok(text)
         },
         code => {
-            log::error!("Returned status code {}", code);
-            Err(BGError::AppError(format!("Returned status code {}", code)))
+            log::error!("Request to {} returned status code {}", src, code);
+            Err(BGError::AppError(format!("Request to {} returned status code {}", src, code)))
         }
     }
 }
