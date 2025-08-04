@@ -1,0 +1,6 @@
+/example
+/.vscode
+/.idea
+/target
+/compose.yaml
+/*.md
