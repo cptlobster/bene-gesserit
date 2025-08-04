@@ -2,8 +2,10 @@
 bind = "0.0.0.0:42069"
 
 [sources]
-words = "{{ config.labyrinth.base_path }}{{ config.labyrinth.words }}"
-markov = [ {% for file_name in config.labyrinth.corpus -%} "{{ config.labyrinth.base_path }}{{file_name}}" {%- if not loop.last -%} , {% endif %} {%- endfor %} ]
+words = "{{ words }}"
+markov = [{% for file in corpus %}
+    "{{ file }}" {%- if not loop.last -%} , {% endif %} {%- endfor %}
+]
 
 {% if config.metrics.enabled -%}
 [metrics]

@@ -1,5 +1,7 @@
+target = "./docker_include"
+
 [endpoints]
-target = "http://target:80"
+target = "http://example:80"
 iocaine = "http://iocaine:42069"
 anubis = "http://anubis:8080"
 internal = "http://proxy:8081"
@@ -12,11 +14,32 @@ endpoints = [
 
 [labyrinth]
 banish_threshold = 3
-base_path = "/etc/iocaine/"
+base_path = "/etc/iocaine/corpus/"
 corpus = [
-    "corpus/bee-movie.txt"
+    { gutenberg = 50133 },
+    { gutenberg = 31469 },
+    { gutenberg = 30637 },
+    { gutenberg = 68283 },
+    { gutenberg = 70652 },
+    { gutenberg = 73181 },
+    { gutenberg = 68236 },
+    { gutenberg = 73547 },
+    { gutenberg = 76113 },
+    { gutenberg = 68553 },
+    { gutenberg = 71167 },
+    { gutenberg = 72966 },
+    { gutenberg = 73233 },
+    { gutenberg = 70486 },
+    { gutenberg = 73230 },
+    { gutenberg = 73177 },
+    { gutenberg = 70899 },
+    { gutenberg = 70912 },
+    { gutenberg = 68547 },
+    { gutenberg = 73243 },
+    { gutenberg = 70478 },
+    { gutenberg = 73182 }
 ]
-words = "corpus/bee-movie.txt"
+words.url = "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words_alpha.txt"
 
 [metrics]
 enabled = true

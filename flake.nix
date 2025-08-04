@@ -18,6 +18,10 @@
             # Rust
             rust-bin.stable.latest.default
             trunk
+
+            # OpenSSL deps
+            pkg-config
+            openssl.dev
           ];
 
           LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";

@@ -106,6 +106,11 @@ A client will follow this basic flow through the system:
   - [x] Generate OpenResty config from environment variables or central config file
   - [x] Generate Iocaine config (i.e. corpus file locations) from central config file
   - [ ] Provide default "library" options for markov chain corpus (list of files to curl on container start? something like that)
+    - [x] Provide corpus downloader tooling
+    - [ ] Support downloading common free sources
+      - [x] Arbitrary URL
+      - [x] Project Gutenberg
+      - [ ] Wikipedia
 - [ ] Metrics
   - [x] Connect Anubis to Prometheus
   - [x] Connect Iocaine to Prometheus
@@ -131,3 +136,7 @@ This project is licensed under the [GNU General Public License, version 3](LICEN
 *This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.*<br />
 *This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.*<br />
 *You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.*
+
+This project also features functionality to download books from [Project Gutenberg](https://www.gutenberg.org) for training the labyrinth generator. The text of these books is licensed under the Project Gutenberg License.
+
+*This eBook is for the use of anyone anywhere in the United States and most other parts of the world at no cost and with almost no restrictions whatsoever. You may copy it, give it away or re-use it under the terms of the Project Gutenberg License included with this eBook or online at www.gutenberg.org. If you are not located in the United States, you will have to check the laws of the country where you are located before using this eBook.*

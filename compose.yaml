@@ -34,6 +34,7 @@ services:
     depends_on:
       - iocaine
       - anubis
+      - example
 
   # caddy will route bad requests to iocaine
   iocaine:
@@ -75,8 +76,6 @@ services:
     image: httpd:2.4
     volumes:
       - "./example/:/usr/local/apache2/htdocs/"
-    depends_on:
-      - proxy
 
 volumes:
   prometheus_data:

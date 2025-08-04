@@ -1,49 +1,60 @@
 use serde::{Serialize, Deserialize};
+use std::path::PathBuf;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    endpoints: EndpointConfig,
+    pub target: PathBuf,
+    pub endpoints: EndpointConfig,
     #[serde(default)]
-    honeypot: Option<HoneypotConfig>,
+    pub honeypot: Option<HoneypotConfig>,
     #[serde(default)]
-    ratelimit: Option<RatelimitConfig>,
-    labyrinth: LabyrinthConfig,
-    metrics: MetricsConfig
+    pub ratelimit: Option<RatelimitConfig>,
+    pub labyrinth: LabyrinthConfig,
+    pub metrics: MetricsConfig
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct EndpointConfig {
-    target: String,
-    iocaine: String,
-    anubis: String,
-    internal: String
+    pub target: String,
+    pub iocaine: String,
+    pub anubis: String,
+    pub internal: String
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct HoneypotConfig {
-    endpoints: Vec<String>,
+    pub endpoints: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RatelimitConfig {
-    rules: Vec<RatelimitRule>
+    pub rules: Vec<RatelimitRule>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LabyrinthConfig {
-    banish_threshold: u32,
+    pub banish_threshold: u32,
     #[serde(flatten)]
-    iocaine: IocaineMixins
+    pub iocaine: IocaineMixins
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct IocaineMixins {
-    base_path: String,
-    corpus: Vec<String>,
-    words: String
+    pub base_path: String,
+    pub corpus: Vec<CorpusSrc>,
+    pub words: CorpusSrc
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all="snake_case")]
+pub enum CorpusSrc {
+    Url(String),
+    Gutenberg(u32),
+    #[serde(untagged)]
+    Path(PathBuf)
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub enum RatelimitRule {
     AnyRequests {
         amount: u32,
@@ -56,7 +67,7 @@ pub enum RatelimitRule {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct MetricsConfig {
-    enabled: bool
+    pub enabled: bool
 }
