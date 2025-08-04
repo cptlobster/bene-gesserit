@@ -1,4 +1,4 @@
-use std::fs::{copy, File};
+use std::fs::{copy, create_dir_all, File};
 use std::io::Write;
 use std::path::PathBuf;
 use crate::{config::CorpusSrc, error::BGError};
@@ -32,6 +32,10 @@ fn get(client: &Client, src: &CorpusSrc, target_dir: &PathBuf) -> Result<(), BGE
                 .and_then(simplify_gutenberg)
                 .and_then(|content| save(content, &target_path)),
             CorpusSrc::Path(path) => {
+                if let Some(p) = target_path.parent() { 
+                    log::debug!("Constructing path {}...", &p.to_str().unwrap());
+                    create_dir_all(p)?
+                };
                 copy(path, &target_path)?;
                 Ok(())
             }
@@ -67,6 +71,10 @@ fn simplify_gutenberg(content: String) -> Result<String, BGError> {
 }
 
 fn save(content: String, path: &PathBuf) -> Result<(), BGError> {
+    if let Some(p) = path.parent() { 
+        log::debug!("Constructing path {}...", &p.to_str().unwrap());
+        create_dir_all(p)?
+    };
     let mut f = File::create(path)?;
     Ok(f.write_all(content.as_bytes())?)
 }

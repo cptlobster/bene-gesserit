@@ -1,4 +1,4 @@
-use std::{fs::File, io::Write, path::PathBuf};
+use std::{fs::{File, create_dir_all}, io::Write, path::PathBuf};
 
 use tera::{Context, Tera};
 
@@ -21,6 +21,10 @@ pub fn render(config: &Config, template_path: &str, target_path: &PathBuf) -> Re
         let rendered = tera.render(template, &context)?;
         let full_path = target_path.join(template).with_extension("");
         log::debug!("Saving to file {}", &full_path.to_str().unwrap());
+        if let Some(p) = full_path.parent() { 
+            log::debug!("Constructing path {}...", &p.to_str().unwrap());
+            create_dir_all(p)?
+        };
         let mut file = File::create(full_path)?;
         file.write_all(rendered.as_bytes())?;
     }
