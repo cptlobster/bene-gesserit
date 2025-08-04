@@ -21,6 +21,7 @@
 
             # OpenSSL deps
             pkg-config
+            make
             openssl.dev
           ];
 
