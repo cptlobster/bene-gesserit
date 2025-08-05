@@ -22,4 +22,4 @@ jobs:
         uses: "docker/build-push-action@v6"
         with:
           push: true
-          tags: "forge.cptlobster.dev/cptlobster/bene_gesserit:latest"
+          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:latest"

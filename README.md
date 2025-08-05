@@ -1,7 +1,8 @@
 # bene-gesserit
 A fully self-hosted proxy service that poisons the minds of the thinking machines (LLMs, aggressive scrapers). This combines a few open-source tools (such as [Anubis](https://anubis.techaro.lol/) and [Iocaine](https://iocaine.madhouse-project.org/)) and [OpenResty](https://openresty.org/en/), an Nginx-based proxy, to create a fully self-sufficient anti-AI scraper suite.
 
-Configurations are provided in the following formats:
+Deployments are provided in the following formats:
+- Single-Container Docker
 - Docker Compose
 
 More configuration formats may be added (i.e. Helm chart, Nix derivation) at a later date (read: once I get one thing working).
@@ -15,18 +16,34 @@ Perhaps the most well-integrated solution is [Cloudflare's AI Labyrinth](https:/
 
 bene-gesserit doesn't just feed AI scrapers irrelevant content; it gives them a stream of Markov-chain generated nonsense that will waste their time and poison their training data. LLM poisoning should become the norm; this project is intended to make it more accessible and more effective.
 
+### Name
+
+bene-gesserit's naming comes from the *Dune* series, by Frank Herbert:
+
+> "BENE GESSERIT: the ancient school of mental and physical training established primarily for female students after the Butlerian Jihad destroyed the so-called "thinking machines" and robots."
+
+― Terminology of the Imperium (quote obtained from [Dune wiki](https://dune.fandom.com/wiki/Bene_Gesserit))
+
 ## Deploying
 
-### READ THIS FIRST!
-You will need to adjust the configurations in this repository to make this work properly in your production environment.
+### Single-Container Docker (Recommended!)
 
-1. Update `$upstream_url`'s initial parameter in `./openresty/nginx.conf.d/default.conf` to your intended endpoint
-2. Change the list of honeypot URLs in `./openresty/bg_conf/honeypots` to the accurate list of honeypot endpoints for your application.
-3. Add text files to the `./iocaine/corpus` directory (grab a few long Wikipedia articles, or whatever else fits your preferences), and change the `markov` array in `./iocaine/config.toml` to point to those paths (adjusting for the bind mount; `./iocaine/corpus/bee-movie.txt` would become `/etc/iocaine/corpus/bee-movie.txt`)
+The single-container deployment contains all components bundled in one instance. While this may not be scalable, it should be sufficient for protecting a small webserver with light (normal) traffic.
 
-This will be automated in a future commit.
+To start up a single container instance of bene-gesserit with an existing config:
+
+```sh
+docker run -p 9999:80 \
+    -v ./config.toml:/etc/bene_gesserit/config.toml:r \
+    -v ./corpus:/etc/iocaine/corpus \
+    forge.cptlobster.dev/cptlobster/bene-gesserit:latest
+```
+
+The bind mount for the `corpus` directory exists to reduce needless downloading of corpus files, as the corpus downloader will ignore existing files.
 
 ### Docker Compose
+
+**NOTE: These instructions are out of date and will not work.**
 
 ```sh
 cargo run
@@ -51,10 +68,10 @@ graph TD
     EXT([External Client])
     INT([Internal Client / Service])
 
-    subgraph AS[antiscraper collection]
+    subgraph BG[bene-gesserit]
         ANU[Anubis]
         OPR[OpenRESTy]
-        subgraph OPR[OpenRESTy]
+        subgraph OPR[OpenResty]
             PUB[Public Proxy]
             PRV[Private Proxy]
         end
@@ -101,7 +118,7 @@ A client will follow this basic flow through the system:
     - [ ] Ratelimit queries to multiple unique endpoints in short period of time
     - [ ] Permanently redirect all client queries to Iocaine if they trigger honeypots/ratelimit too many times
 - [ ] Configuration Simplification
-  - [ ] Get environment variable configuration working in OpenResty for endpoint URLs
+  - [ ] Get automated configuration working in OpenResty for endpoint URLs (use existing config injection!!)
   - [x] Generate honeypot list from central config file
   - [x] Generate OpenResty config from environment variables or central config file
   - [x] Generate Iocaine config (i.e. corpus file locations) from central config file
@@ -111,6 +128,12 @@ A client will follow this basic flow through the system:
       - [x] Arbitrary URL
       - [x] Project Gutenberg
       - [ ] Wikipedia
+  - [ ] Automate config injection pathing for various environments
+    - [ ] Determine what environment is in use based on environment variable or some other identifier
+- [ ] Documentation
+  - [ ] All Rust code should have docstrings, confusing parts should be commented
+  - [ ] Config file(s) should have comments
+  - [ ] Dockerfile should have comments
 - [ ] Metrics
   - [x] Connect Anubis to Prometheus
   - [x] Connect Iocaine to Prometheus
@@ -125,7 +148,7 @@ A client will follow this basic flow through the system:
     - [ ] Investigate other common services and add accordingly
 - [ ] Deployment Improvement
   - [ ] Alternative Deployment Methods
-    - [ ] Unified Docker Image
+    - [x] Unified Docker Image
     - [ ] Nix derivation
     - [ ] Helm Chart
   - [ ] Try to manage deployment methods using Nix if possible
