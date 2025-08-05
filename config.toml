@@ -1,4 +1,9 @@
-target = "./docker_include"
+[targets]
+anubis = "./docker_include/anubis"
+iocaine = "./docker_include/iocaine"
+nginx = "./docker_include/nginx"
+prometheus = "./docker_include/prometheus"
+supervisord = "./docker_include/supervisord"
 
 [endpoints]
 target = "http://example:80"
@@ -14,7 +19,6 @@ endpoints = [
 
 [labyrinth]
 banish_threshold = 3
-base_path = "/etc/iocaine/corpus/"
 corpus = [
     { gutenberg = 50133 },
     { gutenberg = 31469 },
