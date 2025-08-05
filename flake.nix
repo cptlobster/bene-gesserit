@@ -21,7 +21,7 @@
 
             # OpenSSL deps
             pkg-config
-            make
+            gnumake
             openssl.dev
           ];
 

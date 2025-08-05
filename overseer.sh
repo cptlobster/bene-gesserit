@@ -16,6 +16,7 @@ info "Generating configurations..."
 
 bene_gesserit
 
-info "Starting processes..."
+info "Starting processes using supervisord..."
 
 # TODO: start openresty/Anubis/Iocaine
+supervisord -c /etc/supervisord/supervisord.conf -n

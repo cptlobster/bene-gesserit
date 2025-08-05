@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    pub target: PathBuf,
+    pub targets: TargetPaths,
     pub endpoints: EndpointConfig,
     #[serde(default)]
     pub honeypot: Option<HoneypotConfig>,
@@ -11,6 +11,15 @@ pub struct Config {
     pub ratelimit: Option<RatelimitConfig>,
     pub labyrinth: LabyrinthConfig,
     pub metrics: MetricsConfig
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TargetPaths {
+    pub nginx: PathBuf,
+    pub anubis: PathBuf,
+    pub iocaine: PathBuf,
+    pub prometheus: PathBuf,
+    pub supervisord: PathBuf
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -40,7 +49,6 @@ pub struct LabyrinthConfig {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct IocaineMixins {
-    pub base_path: String,
     pub corpus: Vec<CorpusSrc>,
     pub words: CorpusSrc
 }

@@ -20,7 +20,7 @@ services:
   proxy:
     image: openresty/openresty
     volumes:
-      - "./docker_include/openresty:/etc/nginx"
+      - "./docker_include/nginx:/etc/nginx"
     # THIS IS THE ONLY PORT THAT SHOULD BE PUBLICLY EXPOSED
     ports:
       - "${MAIN_PORT:-9999}:80"

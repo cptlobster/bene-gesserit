@@ -1,0 +1,23 @@
+[supervisord]
+nodaemon=true
+logfile=/dev/null
+logfile_maxbytes=0
+
+[program:openresty]
+command=openresty -g "daemon off;"
+stdout_logfile=/dev/fd/1
+stdout_logfile_maxbytes=0
+redirect_stderr=true
+
+[program:anubis]
+command=/usr/local/bin/anubis
+stdout_logfile=/dev/fd/1
+stdout_logfile_maxbytes=0
+redirect_stderr=true
+environment=BIND=":8080",DIFFICULTY="1",METRICS_BIND=":9090",SERVE_ROBOTS_TXT="false",TARGET="http://localhost:8081"
+
+[program:iocaine]
+command=/usr/local/bin/iocaine --config-file /etc/iocaine/config.toml
+stdout_logfile=/dev/fd/1
+stdout_logfile_maxbytes=0
+redirect_stderr=true

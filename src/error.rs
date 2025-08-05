@@ -7,6 +7,8 @@ pub enum BGError {
     TemplatingError(#[from] tera::Error),
     #[error("I/O Error: {0}")]
     IoError(#[from] io::Error),
+    #[error("I/O Error: {0}")]
+    FsExtraError(#[from] fs_extra::error::Error),
     #[error("Config parse error: {0}")]
     TomlError(#[from] toml::de::Error),
     #[error("HTTP Request error: {0}")]
