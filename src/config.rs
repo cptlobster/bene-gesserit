@@ -46,6 +46,7 @@ pub struct ListenConfig {
     pub external: String,
     pub internal: String,
     pub anubis: String,
+    pub anubis_type: String,
     pub iocaine: String,
     pub prometheus: String,
     pub metrics: MetricsListenConfig

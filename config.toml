@@ -19,6 +19,7 @@ supervisord = "./docker_include/supervisord"
 external = "80"
 iocaine = "0.0.0.0:42069"
 anubis = ":8080"
+anubis_type = "tcp"
 internal = "8081"
 prometheus = ":9090"
 
