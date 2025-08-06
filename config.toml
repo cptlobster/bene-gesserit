@@ -1,24 +1,51 @@
+# This is the config file for Bene Gesserit. This is the single source of truth 
+# for all configuration parameters, and should be the only place that you make
+# configuration changes for the application. The generator script will handle
+# creating other configuration files based on this one.
 [targets]
+# The target directories for generated configs / other files.
 anubis = "./docker_include/anubis"
 iocaine = "./docker_include/iocaine"
 nginx = "./docker_include/nginx"
 prometheus = "./docker_include/prometheus"
 supervisord = "./docker_include/supervisord"
 
+# The endpoints each service should target / output themselves to. You shouldn't
+# need to manually tweak this, it should be configured for the environment that
+# you are using. For Docker Compose, this will be service container names; for
+# single-image Docker installations, these will be localhost addresses or UNIX
+# sockets.
 [endpoints]
 target = "http://example:80"
 iocaine = "http://iocaine:42069"
 anubis = "http://anubis:8080"
 internal = "http://proxy:8081"
 
+# This section configures "honeypot" endpoints; Any endpoints that match these
+# patterns will automatically be passed into the labyrinth.
 [honeypot]
+# A set of regex patterns to match.
 endpoints = [
     "^/sicily",
     "^/asia"
 ]
 
+# Configuration parameters for the labyrinth, an endless tree of Markov chain
+# generated nonsense. These configurations are used for Iocaine.
 [labyrinth]
+# After n amount of violations, clients will be permanently sent into the
+# labyrinth on all future requests (even to legitimate endpoints). A "client" is
+# determined by the cookie set by Anubis on their initial connection. Setting
+# this to 0 disables this functionality, and clients will not be permanently
+# sent into the labyrinth (just when they trigger violations).
 banish_threshold = 3
+# The file(s) used to train the Markov chain generator. These should be long
+# text files that contain a lot of words. You can select files on your computer
+# or arbitrary URLs, or use one of the pre-configured text file services (such
+# as Project Gutenberg).
+# This example uses the entire works of H. P. Lovecraft, in order to subject
+# scrapers to machine-made horrors beyond their comprehension.
+# TODO: implement profanity/slur filter
 corpus = [
     { gutenberg = 50133 },
     { gutenberg = 31469 },
@@ -43,7 +70,10 @@ corpus = [
     { gutenberg = 70478 },
     { gutenberg = 73182 }
 ]
+# A word list URL. This should be a file containing a list of words, separated
+# by newlines. These will be used for generating URL paths to link to.
 words.url = "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words_alpha.txt"
 
+# Configuration for Prometheus metrics.
 [metrics]
 enabled = true
