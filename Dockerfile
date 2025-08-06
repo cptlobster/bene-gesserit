@@ -52,7 +52,5 @@ COPY static static
 COPY templates templates
 COPY overseer.sh overseer.sh
 
-USER overseer
-
 # Use overseer script as entrypoint
 ENTRYPOINT ./overseer.sh
