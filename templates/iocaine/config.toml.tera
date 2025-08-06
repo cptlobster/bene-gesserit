@@ -1,5 +1,6 @@
 [server]
 bind = "{{ config.binds.iocaine }}"
+unix_listen_access = "everybody"
 
 [sources]
 words = "{{ words }}"

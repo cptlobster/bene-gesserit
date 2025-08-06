@@ -2,25 +2,23 @@
 nodaemon=true
 logfile=/dev/null
 logfile_maxbytes=0
+umask=777
 
 [program:openresty]
 command=openresty -g "daemon off;"
-user=nginx
 stdout_logfile=/dev/fd/1
 stdout_logfile_maxbytes=0
 redirect_stderr=true
 
 [program:anubis]
 command=/usr/local/bin/anubis
-user=anubis
 stdout_logfile=/dev/fd/1
 stdout_logfile_maxbytes=0
 redirect_stderr=true
-environment=BIND="{{ config.binds.anubis }}",BIND_NETWORK="{{ config.binds.anubis_type }}",{% if config.metrics.enabled %}METRICS_BIND="{{ config.binds.metrics.anubis }}",{% endif %}SERVE_ROBOTS_TXT="false",TARGET="{{ config.endpoints.internal }}"
+environment=BIND="{{ config.binds.anubis }}",SOCKET_MODE="0777",BIND_NETWORK="{{ config.binds.anubis_type }}",{% if config.metrics.enabled %}METRICS_BIND="{{ config.binds.metrics.anubis }}",{% endif %}SERVE_ROBOTS_TXT="false",TARGET="{{ config.endpoints.internal }}"
 
 [program:iocaine]
 command=/usr/local/bin/iocaine --config-file /etc/iocaine/config.toml
-user=iocaine
 stdout_logfile=/dev/fd/1
 stdout_logfile_maxbytes=0
 redirect_stderr=true
