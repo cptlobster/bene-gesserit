@@ -10,6 +10,8 @@ use std::path::PathBuf;
 pub struct Config {
     /// Filepath targets for config generation.
     pub targets: TargetPaths,
+    /// Endpoint listens for orchestrated services.
+    pub binds: ListenConfig,
     /// Endpoint targets for orchestrated services.
     pub endpoints: EndpointConfig,
     /// Configuration for honeypots. If not specified, the honeypot generator
@@ -37,17 +39,34 @@ pub struct TargetPaths {
     pub supervisord: PathBuf
 }
 
-/// The endpoints each service should target / output themselves to. You
-/// shouldn't need to manually tweak this, it should be configured for the
-/// environment that you are using. For Docker Compose, this will be service
-/// container names; for single-image Docker installations, these will be
-/// localhost addresses or UNIX sockets.
+/// The endpoints each service should listen on. Since the syntax is different
+/// between services, this will look different than the targets.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ListenConfig {
+    pub external: String,
+    pub internal: String,
+    pub anubis: String,
+    pub iocaine: String,
+    pub prometheus: String,
+    pub metrics: MetricsListenConfig
+}
+
+/// The endpoints that metrics services should listen on.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MetricsListenConfig {
+    pub anubis: String,
+    pub iocaine: String
+}
+
+/// The endpoints each service should target.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EndpointConfig {
     pub target: String,
     pub iocaine: String,
     pub anubis: String,
-    pub internal: String
+    pub internal: String,
+    #[serde(default)]
+    pub use_docker_resolver: bool
 }
 
 /// This section configures "honeypot" endpoints; Any endpoints that match these

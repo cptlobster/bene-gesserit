@@ -1,5 +1,5 @@
 [server]
-bind = "0.0.0.0:42069"
+bind = "{{ config.binds.iocaine }}"
 
 [sources]
 words = "{{ words }}"
@@ -10,5 +10,5 @@ markov = [{% for file in corpus %}
 {% if config.metrics.enabled -%}
 [metrics]
 enable = true
-bind = "0.0.0.0:42042"
+bind = "{{ config.binds.metrics.iocaine }}"
 {% endif %}

@@ -1,9 +1,11 @@
 lua_package_path "/etc/nginx/lua/?.lua;;";
 
 server {
-    listen       80;
+    listen {{ config.binds.external }};
     server_name  localhost;
+    {%- if config.endpoints.use_docker_resolver %}
     resolver 127.0.0.11 valid=30s;
+    {%- endif %}
 
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -20,9 +22,11 @@ server {
 }
 
 server {
-    listen 8081;
+    listen {{ config.binds.internal }};
     server_name localhost;
+    {%- if config.endpoints.use_docker_resolver %}
     resolver 127.0.0.11 valid=30s;
+    {%- endif %}
 
     location / {
         set $upstream_target {{ config.endpoints.target }};

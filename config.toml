@@ -10,11 +10,27 @@ nginx = "./docker_include/nginx"
 prometheus = "./docker_include/prometheus"
 supervisord = "./docker_include/supervisord"
 
-# The endpoints each service should target / output themselves to. You shouldn't
-# need to manually tweak this, it should be configured for the environment that
-# you are using. For Docker Compose, this will be service container names; for
+# The endpoints each service should expose themselves on. You shouldn't need to
+# manually tweak this, it should be configured for the environment that you are
+# using. For Docker Compose, this will be service container names; for
 # single-image Docker installations, these will be localhost addresses or UNIX
 # sockets.
+[binds]
+external = "80"
+iocaine = "0.0.0.0:42069"
+anubis = ":8080"
+internal = "8081"
+prometheus = ":9090"
+
+[binds.metrics]
+iocaine = "0.0.0.0:42042"
+anubis = ":9091"
+
+
+# The endpoints each service should target. You shouldn't need to manually tweak
+# this, it should be configured for the environment that you are using. For
+# Docker Compose, this will be service container names; for single-image Docker
+# installations, these will be localhost addresses or UNIX sockets.
 [endpoints]
 target = "http://example:80"
 iocaine = "http://iocaine:42069"

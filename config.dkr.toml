@@ -9,6 +9,17 @@ nginx = "/etc/nginx"
 prometheus = "/etc/prometheus"
 supervisord = "/etc/supervisord"
 
+[binds]
+external = "80"
+iocaine = "/var/iocaine.sock"
+anubis = "unix://run/anubis.sock"
+internal = "unix:/var/internal.sock"
+prometheus = ":9090"
+
+[binds.metrics]
+iocaine = "0.0.0.0:42042"
+anubis = ":9091"
+
 # The endpoints each service should target / output themselves to. You shouldn't
 # need to manually tweak this, it should be configured for the environment that
 # you are using. For Docker Compose, this will be service container names; for
@@ -16,9 +27,9 @@ supervisord = "/etc/supervisord"
 # sockets.
 [endpoints]
 target = "http://192.168.1.253:3000"
-iocaine = "http://localhost:42069"
-anubis = "http://localhost:8080"
-internal = "http://localhost:8081"
+iocaine = "unix://var/iocaine.sock"
+anubis = "unix:/var/anubis.sock"
+internal = "unix://var/internal.sock"
 
 # This section configures "honeypot" endpoints; Any endpoints that match these
 # patterns will automatically be passed into the labyrinth.
