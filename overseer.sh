@@ -16,6 +16,12 @@ info "Generating configurations..."
 
 bene_gesserit
 
+info "Changing directory ownership..."
+
+chown -R nginx:arrakis /etc/nginx
+chown -R anubis:arrakis /etc/anubis
+chown -R iocaine:arrakis /etc/iocaine
+
 info "Starting processes using supervisord..."
 
 # TODO: start openresty/Anubis/Iocaine

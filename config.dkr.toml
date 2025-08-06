@@ -11,10 +11,10 @@ supervisord = "/etc/supervisord"
 
 [binds]
 external = "80"
-iocaine = "/var/iocaine.sock"
+iocaine = "/run/iocaine.sock"
 anubis = "/run/anubis.sock"
 anubis_type = "unix"
-internal = "unix:/var/internal.sock"
+internal = "unix:/run/internal.sock"
 prometheus = ":9090"
 
 [binds.metrics]
@@ -28,9 +28,9 @@ anubis = ":9091"
 # sockets.
 [endpoints]
 target = "http://192.168.1.253:3000"
-iocaine = "unix:/var/iocaine.sock"
-anubis = "unix:/var/anubis.sock"
-internal = "unix:///var/internal.sock"
+iocaine = "http://unix:/run/iocaine.sock"
+anubis = "http://unix:/run/anubis.sock"
+internal = "unix:///run/internal.sock"
 
 # This section configures "honeypot" endpoints; Any endpoints that match these
 # patterns will automatically be passed into the labyrinth.

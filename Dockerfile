@@ -33,6 +33,11 @@ RUN curl -L -o anubis.tar.gz https://github.com/TecharoHQ/anubis/releases/downlo
 # Final image, contains all built dependencies
 FROM openresty/openresty:alpine AS final
 
+RUN groupadd arrakis \
+    && useradd nginx -g arrakis \
+    && useradd anubis -g arrakis \
+    && useradd iocaine -g arrakis \
+
 WORKDIR /etc/bene_gesserit
 
 RUN apk add --no-cache supervisor
@@ -46,6 +51,8 @@ COPY --from=curler ./anubis/bin/anubis /usr/local/bin/anubis
 COPY static static
 COPY templates templates
 COPY overseer.sh overseer.sh
+
+USER overseer
 
 # Use overseer script as entrypoint
 ENTRYPOINT ./overseer.sh
