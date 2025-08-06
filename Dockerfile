@@ -33,10 +33,10 @@ RUN curl -L -o anubis.tar.gz https://github.com/TecharoHQ/anubis/releases/downlo
 # Final image, contains all built dependencies
 FROM openresty/openresty:alpine AS final
 
-RUN groupadd arrakis \
-    && useradd nginx -g arrakis \
-    && useradd anubis -g arrakis \
-    && useradd iocaine -g arrakis \
+RUN addgroup arrakis \
+    && adduser nginx -g arrakis \
+    && adduser anubis -g arrakis \
+    && adduser iocaine -g arrakis
 
 WORKDIR /etc/bene_gesserit
 
