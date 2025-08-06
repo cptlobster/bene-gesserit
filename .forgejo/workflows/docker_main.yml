@@ -1,6 +1,17 @@
 
 on:
- [push]
+  push:
+    branches:
+      - 'main'
+    paths:
+      - ".forgejo/workflows/*"
+      - "src/*"
+      - "static/*"
+      - "templates/*"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "Cargo.*"
+      - "overseer.sh"
 
 jobs:
   build:
