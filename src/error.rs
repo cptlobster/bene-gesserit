@@ -1,6 +1,7 @@
 use thiserror::Error;
 use std::io;
 
+/// Catchall error enumeration.
 #[derive(Debug, Error)]
 pub enum BGError {
     #[error("Template rendering error: {0}")]
