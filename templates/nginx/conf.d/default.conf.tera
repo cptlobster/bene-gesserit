@@ -34,7 +34,14 @@ server {
         rewrite_by_lua_block {
             local honeypots = require "honeypots"
 
+            -- check if hitting a honeypot url
             if honeypots.is_honeypot(ngx) then
+                -- Check if the path does not end with a slash
+                local uri = ngx.var.uri;
+                if not uri:match("/$") then
+                    ngx.req.set_uri(uri .. "/", true)
+                end
+
                 ngx.var.upstream_target = "{{ config.endpoints.iocaine }}"
             end
         }
