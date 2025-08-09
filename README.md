@@ -33,7 +33,7 @@ The single-container deployment contains all components bundled in one instance.
 To start up a single container instance of bene-gesserit with an existing config:
 
 ```sh
-docker run -p 9999:80 \
+docker run -d -p 9999:80 \
     -v ./config.toml:/etc/bene_gesserit/config.toml:r \
     -v ./corpus:/etc/iocaine/corpus \
     forge.cptlobster.dev/cptlobster/bene-gesserit:latest

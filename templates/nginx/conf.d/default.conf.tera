@@ -28,6 +28,17 @@ server {
     resolver 127.0.0.11 valid=30s;
     {%- endif %}
 
+    {%- if config.honeypots.override_robots %}
+    location /robots.txt {
+        content_by_lua_block {
+            local robots = require "robots"
+            
+            ngx.header["Content-Type"] = "text/plain"
+            ngx.say(robots.generate_robots_list(ngx))
+        }
+    }
+    {%- endif %}
+
     location / {
         set $upstream_target {{ config.endpoints.target }};
 

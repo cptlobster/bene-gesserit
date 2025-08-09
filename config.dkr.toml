@@ -40,6 +40,9 @@ endpoints = [
     "^/sicily",
     "^/asia"
 ]
+# If set to true, a robots.txt will be generated using the honeypot endpoints.
+# This will override your application's default robots.txt.
+override_robots = true
 
 # Configuration parameters for the labyrinth, an endless tree of Markov chain
 # generated nonsense. These configurations are used for Iocaine.
