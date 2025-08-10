@@ -1,13 +1,17 @@
 //! Downloading, processing, and storing corpus files for training the Markov
 //! chain.
-use std::fs::{copy, create_dir_all, File};
-use std::io::Write;
+use std::fs::{copy, create_dir_all};
 use std::path::PathBuf;
 use crate::{config::CorpusSrc, error::BGError};
+use std::hash::{DefaultHasher, Hash, Hasher};
+#[cfg(feature = "http")]
+use std::fs::File;
+#[cfg(feature = "http")]
+use std::io::Write;
+#[cfg(feature = "http")]
 use regex::Regex;
 #[cfg(feature = "http")]
 use reqwest::{blocking::Client, StatusCode};
-use std::hash::{DefaultHasher, Hash, Hasher};
 
 /// Download many corpus files. Reuses the same client to avoid recreating it
 /// several times.
