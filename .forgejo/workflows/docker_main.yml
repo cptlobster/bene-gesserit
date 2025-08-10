@@ -29,8 +29,13 @@ jobs:
           registry: "forge.cptlobster.dev"
           username: "cptlobster"
           password: ${{ secrets.PACKAGE_TOKEN }}
-      - name: "Build and Push"
+      - name: "Build and Push (Minimal)"
         uses: "docker/build-push-action@v6"
         with:
           push: true
           tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:latest"
+      - name: "Build and Push (Full)"
+        uses: "docker/build-push-action@v6"
+        with:
+          push: true
+          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:full"

@@ -2,8 +2,7 @@
 # Rust builder image
 FROM rust:alpine AS rs_builder
 
-# Install all dependencies for building
-RUN apk add --no-cache openssl-dev openssl pkgconf musl-dev make perl
+RUN apk add --no-cache musl-dev
 
 # Copy all necessary source files
 WORKDIR /usr/src/bene-gesserit

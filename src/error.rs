@@ -10,6 +10,7 @@ pub enum BGError {
     IoError(#[from] io::Error),
     #[error("Config parse error: {0}")]
     TomlError(#[from] toml::de::Error),
+    #[cfg(feature = "http")]
     #[error("HTTP Request error: {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("Regex error: {0}")]
