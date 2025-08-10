@@ -30,16 +30,25 @@ bene-gesserit's naming comes from the *Dune* series, by Frank Herbert:
 
 The single-container deployment contains all components bundled in one instance. While this may not be scalable, it should be sufficient for protecting a small webserver with light (normal) traffic.
 
-To start up a single container instance of bene-gesserit with an existing config:
+To start up a single container instance of bene-gesserit for the first time:
 
 ```sh
-docker run -d -p 9999:80 \
+docker run -d -p 9999:80 -p 9090:9090 \
+    -v ./config.toml:/etc/bene_gesserit/config.toml:r \
+    -v ./corpus:/etc/iocaine/corpus \
+    forge.cptlobster.dev/cptlobster/bene-gesserit:full
+```
+
+The bind mount for the `corpus` directory exists to reduce needless downloading of corpus files, as the corpus downloader will ignore existing files.
+
+**NOTE: For the first run, make sure that you use the `full` image tag to download all of your corpus files. For subsequent runs, if you cache your corpus files using the above volume mount, you can use the `latest` tag for a (slightly) smaller image. On subsequent runs, use the following command:**
+
+```sh
+docker run -d -p 9999:80 -p 9090:9090 \
     -v ./config.toml:/etc/bene_gesserit/config.toml:r \
     -v ./corpus:/etc/iocaine/corpus \
     forge.cptlobster.dev/cptlobster/bene-gesserit:latest
 ```
-
-The bind mount for the `corpus` directory exists to reduce needless downloading of corpus files, as the corpus downloader will ignore existing files.
 
 ### Docker Compose
 
