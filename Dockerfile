@@ -35,25 +35,36 @@ RUN curl -L -o prometheus.tar.gz https://github.com/prometheus/prometheus/releas
     && tar -xzf ./prometheus.tar.gz \
     && mv prometheus-${PROMETHEUS_VERSION}.linux-amd64 prometheus
 
+# downloader for OPM packages
+#FROM openresty/openresty:alpine AS opm
+
+# Install required packages for OPM
+#RUN apk add --no-cache curl perl
+
+# install OPM packages
+#RUN opm get knyar/nginx-lua-prometheus
+
 # Final image, contains all built dependencies
 FROM openresty/openresty:alpine AS final
 
 WORKDIR /etc/bene_gesserit
 
+# install supervisord
 RUN apk add --no-cache supervisor
 
 # Copy compiled generator executable from builder image
 COPY --from=rs_builder /usr/local/cargo/bin/bene_gesserit /usr/local/bin/bene_gesserit
 
 # Copy additional executables from curler image
-COPY --from=curler ./iocaine /usr/local/bin/iocaine
-COPY --from=curler ./anubis/bin/anubis /usr/local/bin/anubis
-COPY --from=curler ./prometheus/prometheus /usr/local/bin/prometheus
+COPY --from=curler ./iocaine \
+    ./anubis/bin/anubis \
+    ./prometheus/prometheus \
+    /usr/local/bin/
+
+# Copy OPM packages from OPM image
 
 # Copy template/include files
-COPY static static
-COPY templates templates
-COPY overseer.sh overseer.sh
+COPY static templates overseer.sh ./
 
 # Use overseer script as entrypoint
 ENTRYPOINT ./overseer.sh
