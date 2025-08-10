@@ -56,7 +56,8 @@ pub struct ListenConfig {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MetricsListenConfig {
     pub anubis: String,
-    pub iocaine: String
+    pub iocaine: String,
+    pub anubis_type: String
 }
 
 /// The endpoints each service should target.
@@ -67,8 +68,17 @@ pub struct EndpointConfig {
     pub anubis: String,
     pub internal: String,
     #[serde(default)]
-    pub use_docker_resolver: bool
+    pub use_docker_resolver: bool,
+    pub metrics: MetricsEndpointConfig
 }
+
+/// targets for Prometheus to use in serving metrics.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MetricsEndpointConfig {
+    pub anubis: String,
+    pub iocaine: String
+}
+
 
 /// This section configures "honeypot" endpoints; Any endpoints that match these
 /// patterns will automatically be passed into the labyrinth.
@@ -76,6 +86,8 @@ pub struct EndpointConfig {
 pub struct HoneypotConfig {
     /// A set of regex patterns for paths to match.
     pub endpoints: Vec<String>,
+    #[serde(default)]
+    pub override_robots: bool
 }
 
 /// This section configures a set of rate limiting rules.

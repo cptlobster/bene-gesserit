@@ -18,8 +18,9 @@ internal = "unix:/run/internal.sock"
 prometheus = ":9090"
 
 [binds.metrics]
-iocaine = "0.0.0.0:42042"
-anubis = ":9091"
+iocaine = "127.0.0.1:9901"
+anubis = ":9902"
+anubis_type = "tcp"
 
 # The endpoints each service should target / output themselves to. You shouldn't
 # need to manually tweak this, it should be configured for the environment that
@@ -27,10 +28,14 @@ anubis = ":9091"
 # single-image Docker installations, these will be localhost addresses or UNIX
 # sockets.
 [endpoints]
-target = "http://192.168.1.253:3000"
+target = "http://100.126.146.26:3000"
 iocaine = "http://unix:/run/iocaine.sock"
 anubis = "http://unix:/run/anubis.sock"
 internal = "unix:///run/internal.sock"
+
+[endpoints.metrics]
+iocaine = "localhost:9901"
+anubis = "localhost:9902"
 
 # This section configures "honeypot" endpoints; Any endpoints that match these
 # patterns will automatically be passed into the labyrinth.

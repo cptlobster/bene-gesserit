@@ -21,6 +21,7 @@ RUN apk add --no-cache curl zstd
 
 ARG IOCAINE_VERSION="2.5.0"
 ARG ANUBIS_VERSION="1.21.3"
+ARG PROMETHEUS_VERSION="3.5.0"
 
 RUN curl -L -o iocaine.zst https://git.madhouse-project.org/api/packages/iocaine/generic/iocaine-binaries/${IOCAINE_VERSION}/iocaine-${IOCAINE_VERSION}.x86_64-linux.zst \
     && unzstd ./iocaine.zst \
@@ -29,6 +30,10 @@ RUN curl -L -o iocaine.zst https://git.madhouse-project.org/api/packages/iocaine
 RUN curl -L -o anubis.tar.gz https://github.com/TecharoHQ/anubis/releases/download/v${ANUBIS_VERSION}/anubis-${ANUBIS_VERSION}-linux-amd64.tar.gz \
     && tar -xzf ./anubis.tar.gz \
     && mv anubis-${ANUBIS_VERSION}-linux-amd64 anubis
+
+RUN curl -L -o prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUS_VERSION}/prometheus-${PROMETHEUS_VERSION}.linux-amd64.tar.gz \
+    && tar -xzf ./prometheus.tar.gz \
+    && mv prometheus-${PROMETHEUS_VERSION}.linux-amd64 prometheus
 
 # Final image, contains all built dependencies
 FROM openresty/openresty:alpine AS final
@@ -39,8 +44,11 @@ RUN apk add --no-cache supervisor
 
 # Copy compiled generator executable from builder image
 COPY --from=rs_builder /usr/local/cargo/bin/bene_gesserit /usr/local/bin/bene_gesserit
+
+# Copy additional executables from curler image
 COPY --from=curler ./iocaine /usr/local/bin/iocaine
 COPY --from=curler ./anubis/bin/anubis /usr/local/bin/anubis
+COPY --from=curler ./prometheus/prometheus /usr/local/bin/prometheus
 
 # Copy template/include files
 COPY static static

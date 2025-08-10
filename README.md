@@ -63,12 +63,13 @@ Some configuration can be set via environment variables.
 
 ## Architecture
 
+### Single Container
 ```mermaid
 graph TD
     EXT([External Client])
     INT([Internal Client / Service])
 
-    subgraph BG[bene-gesserit]
+    subgraph BG[bene-gesserit Container]
         ANU[Anubis]
         OPR[OpenRESTy]
         subgraph OPR[OpenResty]
@@ -78,10 +79,10 @@ graph TD
         IOC[Iocaine]
 
         PROM[(Prometheus)]
-        GRF[Grafana]
     end
 
     SVC[Your service]
+    GRF[Grafana]
 
     EXT --> PUB
     PUB --> ANU
@@ -96,6 +97,8 @@ graph TD
     INT --> PROM
 ```
 
+### Request Flow
+
 A client will follow this basic flow through the system:
 1. New clients will receive a challenge from [Anubis](https://anubis.techaro.lol/)
 2. Successful clients will be passed through to an OpenResty reverse proxy that will handle specific endpoint queries.
@@ -106,7 +109,7 @@ A client will follow this basic flow through the system:
    - If a client breaks rules multiple times (or fails the Anubis challenge), *any* requests they send will be redirected to Iocaine for the foreseeable future (at least until their Anubis-provided cookie expires).
 4. All remaining clients will be passed through to your service.
 
-~~Services will provide Prometheus metrics (either internally or to an external instance of your choice) so you can see which scrapers are being caught / where they are being sent. You can also include an internal Grafana dashboard for viewing metrics, or use an existing Grafana instance.~~ Metrics will be setup in a future commit.
+Services will provide Prometheus metrics (either internally or to an external instance of your choice) so you can see which scrapers are being caught / where they are being sent.
 
 ## Roadmap
 
@@ -118,7 +121,7 @@ A client will follow this basic flow through the system:
     - [ ] Ratelimit queries to multiple unique endpoints in short period of time
     - [ ] Permanently redirect all client queries to Iocaine if they trigger honeypots/ratelimit too many times
 - [ ] Configuration Simplification
-  - [ ] Get automated configuration working in OpenResty for endpoint URLs (use existing config injection!!)
+  - [x] Get automated configuration working in OpenResty for endpoint URLs (use existing config injection!!)
   - [x] Generate honeypot list from central config file
   - [x] Generate OpenResty config from environment variables or central config file
   - [x] Generate Iocaine config (i.e. corpus file locations) from central config file
@@ -131,13 +134,15 @@ A client will follow this basic flow through the system:
   - [ ] Automate config injection pathing for various environments
     - [ ] Determine what environment is in use based on environment variable or some other identifier
 - [ ] Documentation
-  - [ ] All Rust code should have docstrings, confusing parts should be commented
-  - [ ] Config file(s) should have comments
-  - [ ] Dockerfile should have comments
+  - [x] All Rust code should have docstrings, confusing parts should be commented
+  - [x] Config file(s) should have comments
+  - [x] Dockerfile should have comments
+  - [ ] Administrator guide / usage documentation
 - [ ] Metrics
   - [x] Connect Anubis to Prometheus
   - [x] Connect Iocaine to Prometheus
   - [ ] Connect OpenResty to Prometheus
+  - [x] Expose metrics externally via Prometheus
   - [ ] Create Grafana dashboard for easily viewing metrics
 - [ ] Honeypot Link Generation
   - [ ] Create communication layer for reading honeypot endpoint rules from target service
