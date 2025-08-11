@@ -12,11 +12,11 @@ use crate::{config::Config, corpus, environment::EnvConfig, error::BGError};
 
 /// Render all available configuration files and place them in their target
 /// directories.
-pub fn render(config: &Config, template_path: &str) -> Result<(), BGError> {
+pub fn render(config: &Config, template_path: String) -> Result<(), BGError> {
     let env: EnvConfig = config.env.config();
     // create the instance, loading all templates in the template path
     log::debug!("Creating Tera instance...");
-    let tera = Tera::new(template_path)?;
+    let tera = Tera::new(template_path.as_str())?;
     log::debug!("Creating context...");
     let mut context = Context::new();
     // shove all config keys into the config path

@@ -13,6 +13,9 @@ pub enum BGError {
     #[cfg(feature = "http")]
     #[error("HTTP Request error: {0}")]
     ReqwestError(#[from] reqwest::Error),
+    #[cfg(feature = "cli")]
+    #[error("Command error: {0}")]
+    ClapError(#[from] clap::Error),
     #[error("Regex error: {0}")]
     RegexError(#[from] regex::Error),
     #[error("{0}")]
