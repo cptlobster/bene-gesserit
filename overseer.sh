@@ -35,11 +35,11 @@ check_if_exists "iocaine"
 check_if_exists "anubis"
 check_if_exists "openresty"
 check_if_exists "supervisord"
-check_if_exists "bene_gesserit"
+check_if_exists "generator"
 
 info "Generating configurations..."
 
-bene_gesserit || fail "Configuration script failed. See above logs for information."
+generator || fail "Configuration script failed. See above logs for information."
 
 info "Starting processes using supervisord..."
 

@@ -11,7 +11,7 @@ COPY Cargo.toml ./Cargo.toml
 COPY Cargo.lock ./Cargo.lock
 
 # Compile the generator executable
-RUN cargo install --path .
+RUN cargo install --features="cli" --path .
 
 # Curler image (downloads binaries for component programs)
 FROM alpine:3.22 AS curler
@@ -52,7 +52,7 @@ WORKDIR /etc/bene_gesserit
 RUN apk add --no-cache supervisor
 
 # Copy compiled generator executable from builder image
-COPY --from=rs_builder /usr/local/cargo/bin/bene_gesserit /usr/local/bin/bene_gesserit
+COPY --from=rs_builder /usr/local/cargo/bin/generator /usr/local/bin/generator
 
 # Copy additional executables from curler image
 COPY --from=curler ./iocaine \

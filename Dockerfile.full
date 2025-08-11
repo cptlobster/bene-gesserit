@@ -12,7 +12,7 @@ COPY Cargo.toml ./Cargo.toml
 COPY Cargo.lock ./Cargo.lock
 
 # Compile the generator executable
-RUN cargo install --features http --path .
+RUN cargo install --features="http,cli" --path .
 
 # Curler image (downloads binaries for component programs)
 FROM alpine:3.22 AS curler
