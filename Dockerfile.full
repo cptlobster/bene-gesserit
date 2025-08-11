@@ -64,7 +64,9 @@ COPY --from=curler ./iocaine \
 # Copy OPM packages from OPM image
 
 # Copy template/include files
-COPY static templates overseer.sh ./
+COPY static static
+COPY templates templates
+COPY overseer.sh overseer.sh
 
 # Use overseer script as entrypoint
 ENTRYPOINT ./overseer.sh
