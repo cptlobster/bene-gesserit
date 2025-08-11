@@ -1,9 +1,9 @@
 lua_package_path "/etc/nginx/lua/?.lua;;";
 
 server {
-    listen {{ config.binds.external }};
+    listen {{ env.binds.external }};
     server_name  localhost;
-    {%- if config.endpoints.use_docker_resolver %}
+    {%- if env.endpoints.use_docker_resolver %}
     resolver 127.0.0.11 valid=30s;
     {%- endif %}
 
@@ -11,20 +11,20 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
     location / {
-        proxy_pass {{ config.endpoints.anubis }};
+        proxy_pass {{ env.endpoints.anubis }};
         proxy_intercept_errors on;
         error_page 421 @ioc;
     }
 
     location @ioc {
-        proxy_pass {{ config.endpoints.iocaine }};
+        proxy_pass {{ env.endpoints.iocaine }};
     }
 }
 
 server {
-    listen {{ config.binds.internal }};
+    listen {{ env.binds.internal }};
     server_name localhost;
-    {%- if config.endpoints.use_docker_resolver %}
+    {%- if env.endpoints.use_docker_resolver %}
     resolver 127.0.0.11 valid=30s;
     {%- endif %}
 
@@ -40,7 +40,7 @@ server {
     {%- endif %}
 
     location / {
-        set $upstream_target {{ config.endpoints.target }};
+        set $upstream_target {{ config.target }};
 
         rewrite_by_lua_block {
             local honeypots = require "honeypots"
@@ -53,7 +53,7 @@ server {
                     ngx.req.set_uri(uri .. "/", true)
                 end
 
-                ngx.var.upstream_target = "{{ config.endpoints.iocaine }}"
+                ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
             end
         }
 

@@ -8,11 +8,12 @@
 //! - `words`: The word list file, normalized to its target location.
 use std::{fs::{create_dir_all, File}, io::Write, path::{Component, PathBuf}};
 use tera::{Context, Tera};
-use crate::{config::Config, corpus, error::BGError};
+use crate::{config::Config, corpus, environment::EnvConfig, error::BGError};
 
 /// Render all available configuration files and place them in their target
 /// directories.
 pub fn render(config: &Config, template_path: &str) -> Result<(), BGError> {
+    let env: EnvConfig = config.env.config();
     // create the instance, loading all templates in the template path
     log::debug!("Creating Tera instance...");
     let tera = Tera::new(template_path)?;
@@ -20,9 +21,10 @@ pub fn render(config: &Config, template_path: &str) -> Result<(), BGError> {
     let mut context = Context::new();
     // shove all config keys into the config path
     context.insert("config", config);
+    context.insert("env", &env);
     // Since Iocaine corpus file config has some special handling to facilitate
     // downloading, those filepaths are stored as a separate context entry.
-    let base_path = config.targets.iocaine.join("corpus");
+    let base_path = env.targets.iocaine.join("corpus");
     context.insert("corpus", &config.labyrinth.iocaine.corpus.iter().map(|crp| {
         corpus::gen_path(crp, &base_path)
     }).collect::<Vec<PathBuf>>());
@@ -51,13 +53,14 @@ pub fn render(config: &Config, template_path: &str) -> Result<(), BGError> {
 /// Get the target directory for a file from the config. The path should exist
 /// in the config, otherwise throw an error.
 pub fn get_target_from_str(config: &Config, path: &str) -> Result<PathBuf, BGError> {
+    let env: EnvConfig = config.env.config();
     // this codebase is abysmal
     match path {
-        "anubis" => Ok(config.targets.anubis.clone()),
-        "iocaine" => Ok(config.targets.iocaine.clone()),
-        "nginx" => Ok(config.targets.nginx.clone()),
-        "prometheus" => Ok(config.targets.prometheus.clone()),
-        "supervisord" => Ok(config.targets.supervisord.clone()),
+        "anubis" => Ok(env.targets.anubis.clone()),
+        "iocaine" => Ok(env.targets.iocaine.clone()),
+        "nginx" => Ok(env.targets.nginx.clone()),
+        "prometheus" => Ok(env.targets.prometheus.clone()),
+        "supervisord" => Ok(env.targets.supervisord.clone()),
         cat => Err(BGError::AppError(format!("Failed to get target path: {} is not a valid category", cat)))
     }
 }

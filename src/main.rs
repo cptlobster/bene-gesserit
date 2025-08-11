@@ -13,7 +13,7 @@
 //! initial configuration file. It will also download corpus files for feeding
 //! the labyrinth if they are not present.
 use std::{fs::{create_dir_all, File}, io::Read, path::{Path, PathBuf}};
-use crate::{config::Config, error::BGError};
+use crate::{config::Config, environment::EnvConfig, error::BGError};
 use env_logger::Env;
 use std::process::Command;
 
@@ -21,6 +21,7 @@ pub mod config;
 pub mod template;
 pub mod error;
 pub mod corpus;
+pub mod environment;
 
 /// Main entrypoint.
 fn main() -> Result<(), BGError> {
@@ -32,21 +33,23 @@ fn main() -> Result<(), BGError> {
     let mut buf = String::new();
     cfg_file.read_to_string(&mut buf)?;
     let config: Config = toml::from_str(&buf)?;
+    let env: EnvConfig = config.env.config();
+    log::debug!("Environment: {:?}", env);
     // Copy static files from static directory into target directory.
     log::info!("Cloning static files...");
-    copy_if_exists("./static/anubis/.", &config.targets.anubis)?;
-    copy_if_exists("./static/iocaine/.", &config.targets.iocaine)?;
-    copy_if_exists("./static/nginx/.", &config.targets.nginx)?;
-    copy_if_exists("./static/prometheus/.", &config.targets.prometheus)?;
-    copy_if_exists("./static/supervisord/.", &config.targets.supervisord)?;
+    copy_if_exists("./static/anubis/.", &env.targets.anubis)?;
+    copy_if_exists("./static/iocaine/.", &env.targets.iocaine)?;
+    copy_if_exists("./static/nginx/.", &env.targets.nginx)?;
+    copy_if_exists("./static/prometheus/.", &env.targets.prometheus)?;
+    copy_if_exists("./static/supervisord/.", &env.targets.supervisord)?;
     // Render templated configuration files and place them in the target
     // directory.
     log::info!("Rendering templates...");
     template::render(&config, "./templates/**/*.tera")?;
     // Download corpus files and place them in the target directory.
     log::info!("Downloading corpus files...");
-    corpus::get_many(&config.labyrinth.iocaine.corpus, &config.targets.iocaine.join("corpus"))?;
-    corpus::get_one(&config.labyrinth.iocaine.words, &config.targets.iocaine.join("corpus"))?;
+    corpus::get_many(&config.labyrinth.iocaine.corpus, &env.targets.iocaine.join("corpus"))?;
+    corpus::get_one(&config.labyrinth.iocaine.words, &env.targets.iocaine.join("corpus"))?;
     // Everything finished correctly, return ok
     log::info!("Configuration generated. Context length is the mind-killer.");
     Ok(())

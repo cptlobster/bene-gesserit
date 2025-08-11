@@ -1,5 +1,5 @@
 [server]
-bind = "{{ config.binds.iocaine }}"
+bind = "{{ env.binds.iocaine }}"
 unix_listen_access = "everybody"
 
 [sources]
@@ -11,5 +11,5 @@ markov = [{% for file in corpus %}
 {% if config.metrics.enabled -%}
 [metrics]
 enable = true
-bind = "{{ config.binds.metrics.iocaine }}"
+bind = "{{ env.binds.metrics.iocaine }}"
 {% endif %}

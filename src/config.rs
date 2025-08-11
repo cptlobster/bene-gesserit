@@ -4,16 +4,16 @@
 //! script will handle creating other configuration files.
 use serde::{Serialize, Deserialize};
 use std::path::PathBuf;
+use crate::environment::EnvConfOpts;
 
 /// The config object that contains all subconfiguration parameters.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    /// Filepath targets for config generation.
-    pub targets: TargetPaths,
-    /// Endpoint listens for orchestrated services.
-    pub binds: ListenConfig,
-    /// Endpoint targets for orchestrated services.
-    pub endpoints: EndpointConfig,
+    /// The final target endpoint.
+    pub target: String,
+    /// Configuration for the specific environment.
+    #[serde(rename = "environment")]
+    pub env: EnvConfOpts,
     /// Configuration for honeypots. If not specified, the honeypot generator
     /// will not be used.
     #[serde(default)]
@@ -28,57 +28,6 @@ pub struct Config {
     /// Configuration for Prometheus metrics.
     pub metrics: MetricsConfig
 }
-
-/// The target directories for generated configs / other files.
-#[derive(Serialize, Deserialize, Debug)]
-pub struct TargetPaths {
-    pub nginx: PathBuf,
-    pub anubis: PathBuf,
-    pub iocaine: PathBuf,
-    pub prometheus: PathBuf,
-    pub supervisord: PathBuf
-}
-
-/// The endpoints each service should listen on. Since the syntax is different
-/// between services, this will look different than the targets.
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ListenConfig {
-    pub external: String,
-    pub internal: String,
-    pub anubis: String,
-    pub anubis_type: String,
-    pub iocaine: String,
-    pub prometheus: String,
-    pub metrics: MetricsListenConfig
-}
-
-/// The endpoints that metrics services should listen on.
-#[derive(Serialize, Deserialize, Debug)]
-pub struct MetricsListenConfig {
-    pub anubis: String,
-    pub iocaine: String,
-    pub anubis_type: String
-}
-
-/// The endpoints each service should target.
-#[derive(Serialize, Deserialize, Debug)]
-pub struct EndpointConfig {
-    pub target: String,
-    pub iocaine: String,
-    pub anubis: String,
-    pub internal: String,
-    #[serde(default)]
-    pub use_docker_resolver: bool,
-    pub metrics: MetricsEndpointConfig
-}
-
-/// targets for Prometheus to use in serving metrics.
-#[derive(Serialize, Deserialize, Debug)]
-pub struct MetricsEndpointConfig {
-    pub anubis: String,
-    pub iocaine: String
-}
-
 
 /// This section configures "honeypot" endpoints; Any endpoints that match these
 /// patterns will automatically be passed into the labyrinth.

@@ -2,40 +2,14 @@
 # for all configuration parameters, and should be the only place that you make
 # configuration changes for the application. The generator script will handle
 # creating other configuration files based on this one.
-[targets]
-anubis = "/etc/anubis"
-iocaine = "/etc/iocaine"
-nginx = "/etc/nginx"
-prometheus = "/etc/prometheus"
-supervisord = "/etc/supervisord"
 
-[binds]
-external = "80"
-iocaine = "/run/iocaine.sock"
-anubis = "/run/anubis.sock"
-anubis_type = "unix"
-internal = "unix:/run/internal.sock"
-prometheus = ":9090"
-
-[binds.metrics]
-iocaine = "127.0.0.1:9901"
-anubis = ":9902"
-anubis_type = "tcp"
-
-# The endpoints each service should target / output themselves to. You shouldn't
-# need to manually tweak this, it should be configured for the environment that
-# you are using. For Docker Compose, this will be service container names; for
-# single-image Docker installations, these will be localhost addresses or UNIX
-# sockets.
-[endpoints]
+# This target is the inevitable endpoint that your application will reach.
 target = "http://100.126.146.26:3000"
-iocaine = "http://unix:/run/iocaine.sock"
-anubis = "http://unix:/run/anubis.sock"
-internal = "unix:///run/internal.sock"
-
-[endpoints.metrics]
-iocaine = "localhost:9901"
-anubis = "localhost:9902"
+# This variable specifies the configuration of your environment. It can either
+# be a string (which maps to a pre-configured environment), or a table
+# containing all the required values. The environment specifies where files are
+# placed, 
+environment = "docker"
 
 # This section configures "honeypot" endpoints; Any endpoints that match these
 # patterns will automatically be passed into the labyrinth.
