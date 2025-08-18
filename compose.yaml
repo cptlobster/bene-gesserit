@@ -1,4 +1,4 @@
-# antiscraper docker compose configuration.
+# bene-gesserit docker compose configuration.
 services:
   # incoming connections will be routed through anubis
   anubis:

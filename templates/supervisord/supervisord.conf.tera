@@ -25,7 +25,7 @@ redirect_stderr=true
 {%- if config.metrics.enabled %}
 
 [program:prometheus]
-command=/usr/local/bin/prometheus --config.file={{ env.targets.prometheus  }}/prometheus.yml
+command=/usr/local/bin/prometheus --config.file={{ env.targets.prometheus }}/prometheus.yml
 stdout_logfile=/dev/fd/1
 stdout_logfile_maxbytes=0
 redirect_stderr=true

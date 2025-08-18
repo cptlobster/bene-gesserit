@@ -13,6 +13,7 @@ pub enum EnvConfOpts {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EnvConfig {
     pub targets: TargetPaths,
+    pub target_refs: TargetPaths,
     pub binds: ListenConfig,
     pub endpoints: EndpointConfig
 }
@@ -78,6 +79,13 @@ impl EnvConfOpts {
                         prometheus: PathBuf::from("/etc/prometheus"),
                         supervisord: PathBuf::from("/etc/supervisord")
                     },
+                    target_refs: TargetPaths {
+                        nginx: PathBuf::from("/etc/nginx"),
+                        anubis: PathBuf::from("/etc/anubis"),
+                        iocaine: PathBuf::from("/etc/iocaine"),
+                        prometheus: PathBuf::from("/etc/prometheus"),
+                        supervisord: PathBuf::from("/etc/supervisord")
+                    },
                     binds: ListenConfig {
                         external: "80".to_string(),
                         iocaine: "/run/iocaine.sock".to_string(),
@@ -110,6 +118,13 @@ impl EnvConfOpts {
                         iocaine: PathBuf::from("./docker-include/iocaine"),
                         prometheus: PathBuf::from("./docker-include/prometheus"),
                         supervisord: PathBuf::from("./docker-include/supervisord")
+                    },
+                    target_refs: TargetPaths {
+                        nginx: PathBuf::from("/etc/nginx"),
+                        anubis: PathBuf::from("/etc/anubis"),
+                        iocaine: PathBuf::from("/etc/iocaine"),
+                        prometheus: PathBuf::from("/etc/prometheus"),
+                        supervisord: PathBuf::from("/etc/supervisord")
                     },
                     binds: ListenConfig {
                         external: "80".to_string(),
