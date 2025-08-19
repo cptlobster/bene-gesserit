@@ -23,6 +23,11 @@
             pkg-config
             gnumake
             openssl.dev
+
+            # Documentation
+            gnumake
+            python313Packages.sphinx
+            python313Packages.sphinx-book-theme
           ];
 
           LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";

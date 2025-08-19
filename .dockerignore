@@ -1,6 +1,7 @@
 /example
 /.vscode
 /.idea
+/docs
 /target
 /compose.yaml
 /*.md
