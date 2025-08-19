@@ -44,6 +44,11 @@ server {
 
         rewrite_by_lua_block {
             local honeypots = require "honeypots"
+            local clients = require "clients"
+
+            -- load client data
+            local client = clients.get_client(ngx)
+            client = clients.log(ngx, client)
 
             -- check if hitting a honeypot url
             if honeypots.is_honeypot(ngx) then
@@ -52,9 +57,32 @@ server {
                 if not uri:match("/$") then
                     ngx.req.set_uri(uri .. "/", true)
                 end
+                {%- if config.debug %}
+                ngx.header["X-Bene-Gesserit-Violation"] = "honeypot"
+                {%- endif %}
 
+                client = clients.increment_violations(client)
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
             end
+
+            {%- if config.labyrinth.banish_threshold > 0 %}
+            -- if a client has exceeded the banish threshold, send all requests
+            -- to labyrinth
+            if client["violations"] >= {{ config.labyrinth.banish_threshold }} then
+                {%- if config.debug %}
+                ngx.header["X-Bene-Gesserit-Violation"] = "banish"
+                {%- endif %}
+                ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
+            end
+            {%- endif %}
+
+            -- update the client's persistent record with changes
+            clients.update_record(ngx, client)
+
+            {%- if config.debug %}
+            ngx.header["X-Bene-Gesserit-Violations-Count"] = client["violations"]
+            ngx.header["X-Bene-Gesserit-Request-Count"] = #client["requests"]
+            {%- endif %}
         }
 
         proxy_pass $upstream_target;

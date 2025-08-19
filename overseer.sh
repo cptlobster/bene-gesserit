@@ -41,6 +41,11 @@ info "Generating configurations..."
 
 generator || fail "Configuration script failed. See above logs for information."
 
+info "Preparing files..."
+
+touch /etc/nginx/bg_conf/clients.json
+chmod 666 /etc/nginx/bg_conf/clients.json
+
 info "Starting processes using supervisord..."
 
 supervisord -c /etc/supervisord/supervisord.conf -n || fail "Supervisord failed to start. See above logs for information."

@@ -9,6 +9,9 @@ use crate::environment::EnvConfOpts;
 /// The config object that contains all subconfiguration parameters.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
+    /// Whether extra debugging headers are enabled.
+    #[serde(default)]
+    pub debug: bool,
     /// The final target endpoint.
     pub target: String,
     /// Configuration for the specific environment.

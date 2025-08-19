@@ -126,9 +126,9 @@ Services will provide Prometheus metrics (either internally or to an external in
   - [x] Pass all queries through Anubis
   - [x] Redirect Anubis failures to Iocaine
   - [x] Redirect honeypot links to Iocaine
-  - [ ] Track requests over time for Iocaine redirect purposes (based on Anubis cookie)
+  - [x] Track requests over time for Iocaine redirect purposes (based on Anubis cookie)
     - [ ] Ratelimit queries to multiple unique endpoints in short period of time
-    - [ ] Permanently redirect all client queries to Iocaine if they trigger honeypots/ratelimit too many times
+    - [x] Permanently redirect all client queries to Iocaine if they trigger honeypots/ratelimit too many times
 - [ ] Configuration Simplification
   - [x] Get automated configuration working in OpenResty for endpoint URLs (use existing config injection!!)
   - [x] Generate honeypot list from central config file

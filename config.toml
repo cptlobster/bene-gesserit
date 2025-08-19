@@ -3,6 +3,10 @@
 # configuration changes for the application. The generator script will handle
 # creating other configuration files based on this one.
 
+# Enables extra debugging headers if set to true. Disable this in a production
+# instance.
+debug = true
+
 # This target is the inevitable endpoint that your application will reach.
 target = "http://example:80"
 # This variable specifies the configuration of your environment. It can either
