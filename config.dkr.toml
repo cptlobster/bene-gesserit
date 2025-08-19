@@ -27,6 +27,31 @@ endpoints = [
 # This will override your application's default robots.txt.
 override_robots = true
 
+[[ratelimit.rules]]
+rule = "any"
+amount = 30
+seconds = 5
+exclude = [
+    "*.js",
+    "*.mjs",
+    "*.css",
+    "^/favicon",
+    "*.svg"
+]
+
+[[ratelimit.rules]]
+rule = "unique"
+total = 15
+unique = 5
+seconds = 5
+exclude = [
+    "*.js",
+    "*.mjs",
+    "*.css",
+    "^/favicon",
+    "*.svg"
+]
+
 # Configuration parameters for the labyrinth, an endless tree of Markov chain
 # generated nonsense. These configurations are used for Iocaine.
 [labyrinth]

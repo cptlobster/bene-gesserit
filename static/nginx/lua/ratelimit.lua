@@ -1,0 +1,124 @@
+local cjson = require "cjson"
+cjson.decode_array_with_array_mt(true)
+
+local _M = {}
+
+-- Read ratelimit rules
+function get_ratelimit_rules(ngx)
+    local file_path = "/etc/nginx/bg_conf/rules.json"
+
+    local file, err = io.open(file_path, "r")
+    if not file then
+        ngx.log(ngx.ERR, "Failed to open ratelimit rules file: ", err)
+        return { }
+    end
+
+    local content = file:read("*all")
+    file:close()
+
+    local json = { }
+    if content ~= "" then
+        json = cjson.decode(content)
+    end
+
+    return json
+end
+
+-- Check an any request filter to see if it hits the ratelimit
+function check_any_rule(requests, rule)
+    return #requests >= rule["amount"]
+end
+
+-- Check a unique request filter to see if it hits the ratelimit
+function check_unique_rule(requests, rule)
+    if rule["total"] ~= nil then
+        return #requests >= rule["total"] and #filter_unique(requests) >= rule["unique"]
+    else
+        return filter_unique(requests) >= rule["unique"]
+    end
+end
+
+-- Process unique requests
+function filter_unique(requests)
+    local results = {}
+    for _, request in ipairs(requests) do
+        local found = false
+        for _, v in ipairs(results) do
+            if v == request["endpoint"] then
+                found = true
+                break
+            end
+        end
+        if not found then
+            table.insert(results, request["endpoint"])
+        end
+    end
+
+    return results
+end
+
+-- Process include/exclude rules
+function filter_include(requests, rule)
+    local includes = rule["include"]
+    local excludes = rule["exclude"]
+
+    local result = {}
+    for _, request in ipairs(requests) do
+        local keep = #includes == 0
+
+        for _, include in ipairs(includes) do
+            if request.endpoint:match(include) then
+                keep = true
+            end
+        end
+
+        for _, exclude in ipairs(excludes) do
+            if request.endpoint:match(exclude) then
+                keep = false
+            end
+        end
+
+        if keep then
+            table.insert(result, request)
+        end
+    end
+
+    return result
+end
+
+-- Process time-based rules
+function filter_time(requests, before)
+    local result = {}
+    for _, request in pairs(requests) do
+        if request.timestamp > before then
+            table.insert(result, request)
+        end
+    end
+    
+    return result
+end
+
+-- Check if a client has hit a ratelimit
+function _M.check_ratelimit(ngx, client)
+    local rules = get_ratelimit_rules(ngx)
+
+    local now = ngx.time()
+
+    for _, rule in ipairs(rules) do
+        local requests = filter_include(filter_time(client["requests"], now - rule["seconds"]), rule)
+
+        if rule["rule"] == "any_requests" then
+            if check_any_rule(requests, rule) then
+                return rule["seconds"]
+            end
+        elseif rule["rule"] == "unique_requests" then
+            if check_unique_rule(requests, rule) then
+                return rule["seconds"]
+            end
+        end
+    end
+
+    return 0
+end
+
+return _M

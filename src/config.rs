@@ -45,6 +45,7 @@ pub struct HoneypotConfig {
 /// This section configures a set of rate limiting rules.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RatelimitConfig {
+    #[serde(default)]
     pub rules: Vec<RatelimitRule>
 }
 
@@ -101,7 +102,7 @@ pub enum CorpusSrc {
 }
 
 /// Rules for how rate limiting should be triggered.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(tag = "rule", rename_all = "snake_case")]
 pub enum RatelimitRule {
     /// Trigger a ratelimit if users make {amount} requests in {seconds}
@@ -109,7 +110,11 @@ pub enum RatelimitRule {
     #[serde(alias = "any")]
     AnyRequests {
         amount: u32,
-        seconds: u32
+        seconds: u32,
+        #[serde(default)]
+        include: Vec<String>,
+        #[serde(default)]
+        exclude: Vec<String>
     },
     /// Trigger a ratelimit if a user hits {unique} endpoints in {seconds} 
     /// seconds. If total is specified, then a user must make a minimum of
@@ -119,7 +124,11 @@ pub enum RatelimitRule {
         #[serde(default)]
         total: Option<u32>,
         unique: u32,
-        seconds: u32
+        seconds: u32,
+        #[serde(default)]
+        include: Vec<String>,
+        #[serde(default)]
+        exclude: Vec<String>
     }
 }
 

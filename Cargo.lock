@@ -135,6 +135,7 @@ dependencies = [
  "regex",
  "reqwest",
  "serde",
+ "serde_json",
  "tera",
  "thiserror",
  "toml",

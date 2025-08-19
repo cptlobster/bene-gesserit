@@ -1,0 +1,5 @@
+[
+    {%- for rule in rules %}
+    {{ rule }}{% if not loop.last%},{% endif %}
+    {%- endfor %}
+]

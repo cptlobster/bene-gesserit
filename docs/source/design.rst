@@ -27,11 +27,6 @@ How A Scraper Is Caught
 -----------------------
 Bene Gesserit has a few tools to catch scrapers that manage to get past Anubis.
 
-.. note::
-
-   As of this writing, not all features are implemented yet. This note will be
-   removed once they are.
-
 - Administrators can define "honeypot" endpoints, which when requested will
   automatically be passed to the labyrinth.
 - Highly configurable rate limiting rules allow for limiting requests per

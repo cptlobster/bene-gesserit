@@ -8,7 +8,7 @@
 //! - `words`: The word list file, normalized to its target location.
 use std::{fs::{create_dir_all, File}, io::Write, path::{Component, PathBuf}};
 use tera::{Context, Tera};
-use crate::{config::Config, corpus, environment::EnvConfig, error::BGError};
+use crate::{config::{Config, RatelimitRule}, corpus, environment::EnvConfig, error::BGError};
 
 /// Render all available configuration files and place them in their target
 /// directories.
@@ -22,6 +22,8 @@ pub fn render(config: &Config, template_path: String) -> Result<(), BGError> {
     // shove all config keys into the config path
     context.insert("config", config);
     context.insert("env", &env);
+    // Insert the ratelimit rules as JSON strings
+    context.insert("rules", &sermap_rules(config.ratelimit.as_ref().map(|c| c.rules.iter().cloned().collect()).unwrap_or_default())?);
     // Since Iocaine corpus file config has some special handling to facilitate
     // downloading, those filepaths are stored as a separate context entry.
     let base_path = env.targets.iocaine.join("corpus");
@@ -76,4 +78,12 @@ pub fn get_target_from_path(config: &Config, path: &PathBuf) -> Result<PathBuf, 
     } else {
         Err(BGError::AppError(format!("Failed to get path from PathBuf: {:?}", path)))
     }
+}
+
+fn sermap_rules(rules: Vec<RatelimitRule>) -> Result<Vec<String>, BGError> {
+    rules
+        .into_iter()
+        .map(|rule| serde_json::to_string(&rule))
+        .collect::<Result<Vec<String>, serde_json::Error>>()
+        .map_err(|e| e.into())
 }

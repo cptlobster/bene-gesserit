@@ -1,3 +1,5 @@
-{% for pattern in config.honeypot.endpoints -%}
+{%- if config.honeypot %}
+{%- for pattern in config.honeypot.endpoints -%}
 {{ pattern }}
 {% endfor %}
+{%- endif %}

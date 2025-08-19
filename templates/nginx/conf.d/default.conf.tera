@@ -45,11 +45,13 @@ server {
         rewrite_by_lua_block {
             local honeypots = require "honeypots"
             local clients = require "clients"
+            local ratelimit = require "ratelimit"
 
             -- load client data
             local client = clients.get_client(ngx)
             client = clients.log(ngx, client)
 
+            {%- if config.honeypots %}
             -- check if hitting a honeypot url
             if honeypots.is_honeypot(ngx) then
                 -- Check if the path does not end with a slash
@@ -64,6 +66,23 @@ server {
                 client = clients.increment_violations(client)
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
             end
+            {%- endif %}
+
+            {%- if config.ratelimit %}
+            local try_after = ratelimit.check_ratelimit(ngx, client)
+            if try_after > 0 then
+                client = clients.increment_violations(client)
+                clients.update_record(ngx, client)
+                
+                ngx.header["Retry-After"] = try_after
+                {%- if config.debug %}
+                ngx.header["X-Bene-Gesserit-Violation"] = "ratelimit"
+                ngx.header["X-Bene-Gesserit-Violations-Count"] = client["violations"]
+                ngx.header["X-Bene-Gesserit-Request-Count"] = #client["requests"]
+                {%- endif %}
+                ngx.exit(ngx.HTTP_TOO_MANY_REQUESTS)
+            end
+            {%- endif %}
 
             {%- if config.labyrinth.banish_threshold > 0 %}
             -- if a client has exceeded the banish threshold, send all requests

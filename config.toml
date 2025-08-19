@@ -15,6 +15,40 @@ target = "http://example:80"
 # placed, 
 environment = "compose"
 
+# This section configures "honeypot" endpoints; Any endpoints that match these
+# patterns will automatically be passed into the labyrinth.
+[honeypot]
+# A set of regex patterns to match.
+endpoints = [
+    "^/sicily",
+    "^/asia"
+]
+# If set to true, a robots.txt will be generated using the honeypot endpoints.
+# This will override your application's default robots.txt.
+override_robots = true
+
+# These are examples of the configurable ratelimiting rules.
+[[ratelimit.rules]]
+rule = "any"
+amount = 30
+seconds = 5
+exclude = [
+    "*.js",
+    "*.mjs",
+    "*.css"
+]
+
+[[ratelimit.rules]]
+rule = "unique"
+total = 15
+unique = 5
+seconds = 5
+exclude = [
+    "*.js",
+    "*.mjs",
+    "*.css"
+]
+
 # Configuration parameters for the labyrinth, an endless tree of Markov chain
 # generated nonsense. These configurations are used for Iocaine.
 [labyrinth]
