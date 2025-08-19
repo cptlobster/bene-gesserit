@@ -28,7 +28,7 @@ server {
     resolver 127.0.0.11 valid=30s;
     {%- endif %}
 
-    {%- if config.honeypots.override_robots %}
+    {%- if config.honeypot.override_robots %}
     location /robots.txt {
         content_by_lua_block {
             local robots = require "robots"
@@ -51,7 +51,7 @@ server {
             local client = clients.get_client(ngx)
             client = clients.log(ngx, client)
 
-            {%- if config.honeypots %}
+            {%- if config.honeypot %}
             -- check if hitting a honeypot url
             if honeypots.is_honeypot(ngx) then
                 -- Check if the path does not end with a slash

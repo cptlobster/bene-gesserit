@@ -30,6 +30,21 @@ bene-gesserit's naming comes from the *Dune* series, by Frank Herbert:
 
 The single-container deployment contains all components bundled in one instance. While this may not be scalable, it should be sufficient for protecting a small webserver with light (normal) traffic.
 
+The following types of version tags are available:
+
+| Tag Name | Description |
+|---|---|
+| `latest` | The latest published version of Bene Gesserit. |
+| `v#.#.#` | A specific version of Bene Gesserit. |
+| `dev` | The latest build of Bene Gesserit from the main branch. Note that this is *not* guaranteed to be a functional build, and features may change unexpectedly. |
+
+The following variants of each tag may exist as well. Variant tags will be appended to the end of the version (i.e. `v0.1.0-full`); for the `latest` tag, the variant tag will take its place (i.e. there is no `latest-full`, that would just be `full`):
+
+| Variant | Description |
+|---|---|
+| Default | The default build of Bene Gesserit, with only components required for continuous operation. |
+| `full` | Contains a fully-featured build with additional components that aren't completely necessary for day-to-day operations (i.e. HTTP client for downloading corpus files), but may be necessary for initial configuration. |
+
 To start up a single container instance of bene-gesserit for the first time:
 
 ```sh

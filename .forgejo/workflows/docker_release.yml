@@ -25,10 +25,10 @@ jobs:
         with:
           push: true
           file: "Dockerfile.minimal"
-          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:${{ forge.ref_name }}"
+          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:${{ forge.ref_name }},forge.cptlobster.dev/cptlobster/bene-gesserit:latest"
       - name: "Build and Push (Full)"
         uses: "docker/build-push-action@v6"
         with:
           push: true
           file: "Dockerfile.full"
-          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:${{ forge.ref_name }}-full"
+          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:${{ forge.ref_name }}-full,forge.cptlobster.dev/cptlobster/bene-gesserit:full"
