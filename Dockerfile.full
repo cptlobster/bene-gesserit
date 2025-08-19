@@ -53,7 +53,7 @@ WORKDIR /etc/bene_gesserit
 RUN apk add --no-cache supervisor
 
 # Copy compiled generator executable from builder image
-COPY --from=rs_builder /usr/local/cargo/bin/bene_gesserit /usr/local/bin/bene_gesserit
+COPY --from=rs_builder /usr/local/cargo/bin/generator /usr/local/bin/generator
 
 # Copy additional executables from curler image
 COPY --from=curler ./iocaine \
