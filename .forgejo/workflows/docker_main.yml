@@ -8,7 +8,7 @@ on:
       - "src/*"
       - "static/*"
       - "templates/*"
-      - "Dockerfile"
+      - "Dockerfile*"
       - ".dockerignore"
       - "Cargo.*"
       - "overseer.sh"
