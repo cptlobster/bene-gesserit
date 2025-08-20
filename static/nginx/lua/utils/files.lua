@@ -78,7 +78,7 @@ function _M.read_lines(ngx, file_path)
     -- create a lock for the file while reading it
     local lock = _M.lock_file(ngx, file_path)
     if not lock then
-        return ""
+        return {}
     end
 
     -- open the file
