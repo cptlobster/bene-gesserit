@@ -1,4 +1,5 @@
 local fileutils = require "utils/files"
+local jsontable = require "utils/jsontable"
 local cjson = require "cjson"
 cjson.decode_array_with_array_mt(true)
 
@@ -14,18 +15,13 @@ end
 
 -- Get a client's record
 function _M.get_client(ngx)
+    local t = {}
+    -- this is the sole reason we import CJSON in this file, to use an array
+    -- metatable if the client is not found in the client DB
+    setmetatable(t, cjson.array_mt)
+    local default = { violations = 0, requests = t }
     local id = _M.get_id(ngx)
-    local json = fileutils.read_json(ngx, "/etc/nginx/bg_conf/clients.json")
-
-    if json[id] ~= nil then
-        return json[id]
-    else
-        local t = {}
-        -- this is the sole reason we import CJSON in this file, to use an array
-        -- metatable if the client is not found in the client DB
-        setmetatable(t, cjson.array_mt)
-        return { violations = 0, requests = t }
-    end
+    return jsontable.read_by_id(ngx, "/etc/nginx/bg_conf/clients", id, default)
 end
 
 -- Get the current request information
@@ -48,11 +44,7 @@ end
 -- Update a client's record in persistent storage
 function _M.update_record(ngx, client)
     local id = _M.get_id(ngx)
-    local json = fileutils.read_json(ngx, "/etc/nginx/bg_conf/clients.json")
-    
-    json[id] = client
-
-    fileutils.write_json(ngx, "/etc/nginx/bg_conf/clients.json", json)
+    return jsontable.update_by_id(ngx, "/etc/nginx/bg_conf/clients", id, client)
 end
 
 return _M

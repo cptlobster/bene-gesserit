@@ -113,7 +113,7 @@ function _M.write_file(ngx, file_path, content)
     end
     
     -- open the file
-    local file, err = io.open(file_path, "w")
+    local file, err = io.open(file_path, "w+")
     if not file then
         ngx.log(ngx.ERR, "Failed to open file: ", err)
         -- if we fail to open the file, release the lock

@@ -43,8 +43,8 @@ generator || fail "Configuration script failed. See above logs for information."
 
 info "Preparing files..."
 
-touch /etc/nginx/bg_conf/clients.json
-chmod 666 /etc/nginx/bg_conf/clients.json
+mkdir /etc/nginx/bg_conf/clients
+chmod 777 -R /etc/nginx/bg_conf/clients
 
 info "Starting processes using supervisord..."
 
