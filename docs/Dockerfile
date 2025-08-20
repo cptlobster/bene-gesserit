@@ -8,7 +8,7 @@ RUN apk add make
 RUN pip install sphinx sphinx-book-theme
 
 # copy Makefile and source directory
-COPY Makefile source/ /docs/
+COPY . /docs/
 
 RUN make clean html
 
