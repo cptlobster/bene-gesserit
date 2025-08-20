@@ -1,5 +1,7 @@
 lua_package_path "/etc/nginx/lua/?.lua;;";
 
+lua_shared_dict locks 100k;
+
 server {
     listen {{ env.binds.external }};
     server_name  localhost;
