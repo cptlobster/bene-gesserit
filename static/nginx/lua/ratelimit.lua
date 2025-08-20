@@ -43,28 +43,32 @@ function filter_unique(requests)
     return results
 end
 
--- Process include/exclude rules
-function filter_include(requests, rule)
+function match_includes(input, rule)
     local includes = rule["include"]
     local excludes = rule["exclude"]
 
+    local keep = #includes == 0
+
+    for _, include in ipairs(includes) do
+        if input:match(include) then
+            keep = true
+        end
+    end
+
+    for _, exclude in ipairs(excludes) do
+        if input:match(exclude) then
+            keep = false
+        end
+    end
+
+    return keep
+end
+
+-- Process include/exclude rules
+function filter_include(requests, rule)
     local result = {}
     for _, request in ipairs(requests) do
-        local keep = #includes == 0
-
-        for _, include in ipairs(includes) do
-            if request.endpoint:match(include) then
-                keep = true
-            end
-        end
-
-        for _, exclude in ipairs(excludes) do
-            if request.endpoint:match(exclude) then
-                keep = false
-            end
-        end
-
-        if keep then
+        if match_includes(request, rule) then
             table.insert(result, request)
         end
     end
@@ -84,14 +88,27 @@ function filter_time(requests, before)
     return result
 end
 
+-- Process time-based and include/exclude rules in one iteration.
+function filter_relevant(ngx, requests, rule)
+    local now = ngx.time()
+    local before = now - rule["seconds"]
+
+    local result = {}
+    for _, request in pairs(requests) do
+        if request.timestamp > before and match_includes(request.endpoint, rule) then
+            table.insert(result, request)
+        end
+    end
+    
+    return result
+end
+
 -- Check if a client has hit a ratelimit
 function _M.check_ratelimit(ngx, client)
     local rules = get_ratelimit_rules(ngx)
 
-    local now = ngx.time()
-
     for _, rule in ipairs(rules) do
-        local requests = filter_include(filter_time(client["requests"], now - rule["seconds"]), rule)
+        local requests = filter_relevant(ngx, client["requests"], rule)
 
         if rule["rule"] == "any_requests" then
             if check_any_rule(requests, rule) then
