@@ -1,20 +1,11 @@
+local fileutils = require "utils/files"
+
+-- Functions for handling honeypot endpoint paths.
 local _M = {}
 
 -- get a table containing all configured honeypots
 function _M.get_honeypots(ngx)
-    local file_path = "/etc/nginx/bg_conf/honeypots"
-    local file, err = io.open(file_path, "r")
-    if not file then
-        ngx.log(ngx.ERR, "Failed to open honeypots file: ", err)
-        return {}
-    end
-
-    local endpoints = {}
-    for endpoint in file:lines() do
-        table.insert(endpoints, endpoint)
-    end
-
-    file:close()
+    local endpoints = fileutils.read_lines(ngx, "/etc/nginx/bg_conf/honeypots")
     return endpoints
 end
 

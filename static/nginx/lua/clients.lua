@@ -1,6 +1,9 @@
+local fileutils = require "utils/files"
 local cjson = require "cjson"
 cjson.decode_array_with_array_mt(true)
 
+-- Functions for handling the client database. At the moment it is stored in a
+-- single JSON file. This needs to be improved significantly at some point.
 local _M = {}
 
 -- Get a client's ID from their Anubis token
@@ -12,26 +15,14 @@ end
 -- Get a client's record
 function _M.get_client(ngx)
     local id = _M.get_id(ngx)
-    local file_path = "/etc/nginx/bg_conf/clients.json"
-
-    local file, err = io.open(file_path, "r")
-    if not file then
-        ngx.log(ngx.ERR, "Failed to open clients file: ", err)
-        return { violations = 0, requests = { } }
-    end
-
-    local content = file:read("*all")
-    file:close()
-
-    local json = { }
-    if content ~= "" then
-        json = cjson.decode(content)
-    end
+    local json = fileutils.read_json(ngx, "/etc/nginx/bg_conf/clients.json")
 
     if json[id] ~= nil then
         return json[id]
     else
         local t = {}
+        -- this is the sole reason we import CJSON in this file, to use an array
+        -- metatable if the client is not found in the client DB
         setmetatable(t, cjson.array_mt)
         return { violations = 0, requests = t }
     end
@@ -57,34 +48,11 @@ end
 -- Update a client's record in persistent storage
 function _M.update_record(ngx, client)
     local id = _M.get_id(ngx)
-    local file_path = "/etc/nginx/bg_conf/clients.json"
-
-    local content = ""
-    local file, err = io.open(file_path, "r")
-    if not file then
-        ngx.log(ngx.ERR, "Failed to open clients file: ", err)
-    else
-        content = file:read("*all")
-        file:close()
-    end
-
-    local json = {}
-    if content ~= "" then
-        json = cjson.decode(content)
-    end
+    local json = fileutils.read_json(ngx, "/etc/nginx/bg_conf/clients.json")
     
     json[id] = client
 
-    local file, err = io.open(file_path, "w")
-    if not file then
-        ngx.log(ngx.ERR, "Failed to open clients file: ", err)
-        return false
-    end
-
-    local newstr = cjson.encode(json)
-    file:write(newstr)
-    file:close()
-    return true
+    fileutils.write_json(ngx, "/etc/nginx/bg_conf/clients.json", json)
 end
 
 return _M
