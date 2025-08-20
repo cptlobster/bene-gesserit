@@ -3,6 +3,8 @@ FROM python:3.13-alpine AS builder
 
 WORKDIR /docs
 
+RUN apk add make
+
 RUN pip install sphinx sphinx-book-theme
 
 # copy Makefile and source directory
