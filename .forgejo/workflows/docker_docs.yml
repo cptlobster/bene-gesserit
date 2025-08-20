@@ -26,7 +26,7 @@ jobs:
       - name: "Build and Push"
         uses: "docker/build-push-action@v6"
         with:
-          context: "./docs"
+          context: ./docs
           push: true
-          file: "Dockerfile"
-          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:dev-full"
+          file: "./docs/Dockerfile"
+          tags: "forge.cptlobster.dev/cptlobster/bene-gesserit-docs:latest"
