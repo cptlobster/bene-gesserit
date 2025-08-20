@@ -54,4 +54,5 @@ Configuration for using Prometheus metrics.
    :maxdepth: 2
    :caption: Additional Pages:
 
+   ratelimit.rst
    custom_env.rst

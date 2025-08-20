@@ -21,6 +21,15 @@ self-sufficient anti-AI scraper suite.
    care about poisoning LLMs, I would recommend just using
    `Anubis <https://anubis.techaro.lol/>`_ on its own.
 
+Get Started
+-----------
+
+To get started with using Bene Gesserit, check out the :ref:`Deployment` section
+to find the best deployment for your use case. For more information and example
+configuration files, check
+`the source repository <https://forge.cptlobster.dev/cptlobster/bene-gesserit>`_
+for more information.
+
 .. toctree::
    :maxdepth: 3
    :caption: Contents

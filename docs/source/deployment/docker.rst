@@ -5,6 +5,43 @@ The single-container deployment contains all components bundled in one instance.
 While this may not be scalable, it should be sufficient for protecting a small
 webserver with light (normal) traffic.
 
+Image Tags
+----------
+The following types of version tags are available:
+
+.. list-table:: Image Tags
+   :header-rows: 1
+
+   * - Tag Name 
+     - Description
+   * - ``latest``
+     - The latest published version of Bene Gesserit.
+   * - ``v#.#.#``
+     - A specific version of Bene Gesserit.
+   * - ``dev``
+     - The latest build of Bene Gesserit from the main branch. Note that this is
+       `not` guaranteed to be a functional build, and features may change
+       unexpectedly.
+
+The following variants of each tag may exist as well. Variant tags will be
+appended to the end of the version (i.e. ``v0.1.0-full``); for the ``latest``
+tag, the variant tag will take its place (i.e. there is no ``latest-full``, that
+would just be ``full``):
+
+.. list-table:: Image Variants
+   :header-rows: 1
+
+   * - Variant
+     - Description
+   * - Default
+     - The default build of Bene Gesserit, with only components required for
+       continuous operation.
+   * - ``full``
+     - Contains a fully-featured build with additional components that aren't
+       completely necessary for day-to-day operations (i.e. HTTP client for
+       downloading corpus files), but may be necessary for initial
+       configuration.
+
 Configuration
 -------------
 
