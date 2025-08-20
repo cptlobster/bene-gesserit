@@ -5,9 +5,9 @@ on:
       - 'main'
     paths:
       - ".forgejo/workflows/*"
-      - "src/*"
-      - "static/*"
-      - "templates/*"
+      - "src/**"
+      - "static/**"
+      - "templates/**"
       - "Dockerfile*"
       - ".dockerignore"
       - "Cargo.*"

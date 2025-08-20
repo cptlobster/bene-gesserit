@@ -5,7 +5,7 @@ on:
       - 'main'
     paths:
       - ".forgejo/workflows/*"
-      - "docs/*"
+      - "docs/**"
 
 jobs:
   build:
