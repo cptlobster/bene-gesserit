@@ -7,6 +7,8 @@ Deployments are provided in the following formats:
 
 More configuration formats may be added (i.e. Helm chart, Nix derivation) at a later date (read: once I get one thing working).
 
+For more information on how to get started, please check [the documentation](https://bene-gesserit.cptlobster.dev).
+
 **WARNING: This software is deliberately malicious to LLM scrapers (and other aggressive bots). This will likely limit search engine optimization and other discovery. Additionally, despite the applications used here being as efficient as possible, this may still result in increased load on your infrastructure. If you would prefer a more lightweight solution and don't care about poisoning LLMs, I would recommend just using [Anubis](https://anubis.techaro.lol/) on its own.**
 
 ## Motivation

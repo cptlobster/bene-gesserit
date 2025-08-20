@@ -36,7 +36,7 @@ exclude = [
     "*.mjs",
     "*.css",
     "^/favicon",
-    "*.svg"
+    "^/icons/*.svg"
 ]
 
 [[ratelimit.rules]]
@@ -49,7 +49,7 @@ exclude = [
     "*.mjs",
     "*.css",
     "^/favicon",
-    "*.svg"
+    "^/icons/*.svg"
 ]
 
 # Configuration parameters for the labyrinth, an endless tree of Markov chain
