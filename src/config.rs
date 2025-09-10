@@ -60,6 +60,10 @@ pub struct LabyrinthConfig {
     /// will not be permanently sent into the labyrinth (just when they trigger
     /// violations).
     pub banish_threshold: u32,
+    /// After a violation, the application should wait this many seconds before recording another
+    /// violation, for banish purposes. Setting to 0 disables this.
+    #[serde(default = "default_grace_seconds")]
+    pub violation_delay: u32,
     /// Configuration parameters passed through to Iocaine.
     #[serde(flatten)]
     pub iocaine: IocaineMixins
@@ -136,4 +140,9 @@ pub enum RatelimitRule {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MetricsConfig {
     pub enabled: bool
+}
+
+/// The default grace period is 5 seconds.
+fn default_grace_seconds() -> u32 {
+    5
 }

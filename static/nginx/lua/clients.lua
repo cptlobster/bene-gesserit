@@ -19,7 +19,7 @@ function _M.get_client(ngx)
     -- this is the sole reason we import CJSON in this file, to use an array
     -- metatable if the client is not found in the client DB
     setmetatable(t, cjson.array_mt)
-    local default = { violations = 0, requests = t }
+    local default = { violations = 0, last_violation = 0, requests = t }
     local id = _M.get_id(ngx)
     return jsontable.read_by_id(ngx, "/etc/nginx/bg_conf/clients", id, default)
 end
@@ -35,9 +35,24 @@ function _M.log(ngx, client)
     return client
 end
 
+-- Determine if a client can have a violation logged.
+function _M.can_violate(client, now, grace)
+    return client["last_violation"] + grace >= now
+end
+
 -- Increment violations for a client
-function _M.increment_violations(client)
+function _M.record_increment(client, now)
     client["violations"] = client["violations"] + 1
+    client["last_violation"] = now
+    return client
+end
+
+-- Increment violations for a client if it is allowed by the delay policy.
+function _M.increment_violations(ngx, client, grace)
+    local time = ngx.time()
+    if _M.can_violate(client, time, grace) then
+        client = record_increment(client, time)
+    end
     return client
 end
 

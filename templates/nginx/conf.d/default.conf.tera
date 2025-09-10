@@ -65,7 +65,7 @@ server {
                 ngx.header["X-Bene-Gesserit-Violation"] = "honeypot"
                 {%- endif %}
 
-                client = clients.increment_violations(client)
+                client = clients.increment_violations(ngx, client, {{ config.labyrinth.violation_delay }})
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
             end
             {%- endif %}
@@ -73,7 +73,7 @@ server {
             {%- if config.ratelimit %}
             local try_after = ratelimit.check_ratelimit(ngx, client)
             if try_after > 0 then
-                client = clients.increment_violations(client)
+                client = clients.increment_violations(ngx, client, {{ config.labyrinth.violation_delay }})
                 clients.update_record(ngx, client)
                 
                 ngx.header["Retry-After"] = try_after
