@@ -37,7 +37,7 @@ end
 
 -- Determine if a client can have a violation logged.
 function _M.can_violate(client, now, grace)
-    return client["last_violation"] + grace >= now
+    return client["last_violation"] + grace <= now
 end
 
 -- Increment violations for a client
@@ -51,9 +51,10 @@ end
 function _M.increment_violations(ngx, client, grace)
     local time = ngx.time()
     if _M.can_violate(client, time, grace) then
-        client = record_increment(client, time)
+        return _M.record_increment(client, time)
+    else
+        return client
     end
-    return client
 end
 
 -- Update a client's record in persistent storage
