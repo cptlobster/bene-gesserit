@@ -29,7 +29,7 @@ override_robots = true
 
 [[ratelimit.rules]]
 rule = "any"
-amount = 30
+amount = 2
 seconds = 5
 exclude = [
     "*.js",

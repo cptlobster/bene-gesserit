@@ -9,6 +9,7 @@ on:
       - "static/**"
       - "templates/**"
       - "Dockerfile*"
+      - "docker-assets/*"
       - ".dockerignore"
       - "Cargo.*"
       - "overseer.sh"

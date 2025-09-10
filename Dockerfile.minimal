@@ -84,7 +84,7 @@ COPY --from=prom /go/bin/prometheus /usr/local/bin/prometheus
 # Copy template/include files
 COPY static static
 COPY templates templates
-COPY overseer.sh overseer.sh
+COPY docker-assets/overseer.sh overseer.sh
 
 # Use overseer script as entrypoint
 ENTRYPOINT ./overseer.sh
