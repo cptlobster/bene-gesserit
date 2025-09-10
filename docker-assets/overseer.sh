@@ -34,6 +34,7 @@ info "Checking prerequisites..."
 check_if_exists "iocaine"
 check_if_exists "anubis"
 check_if_exists "openresty"
+check_if_exists "prometheus"
 check_if_exists "supervisord"
 check_if_exists "generator"
 
