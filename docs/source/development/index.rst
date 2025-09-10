@@ -9,3 +9,4 @@ code for Bene Gesserit, this guide should help you to get started.
    :caption: Contents:
    
    config.rst
+   testing.rst

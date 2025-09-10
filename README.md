@@ -89,6 +89,22 @@ Some configuration can be set via environment variables.
 | `MAIN_PORT` | The port that all incoming traffic will be routed in from. This will be the port that you direct public traffic to (either directly or through a reverse proxy). | `9999` |
 | `METRICS_PORT` | The port that Prometheus metrics will be served from. | `9090` |
 
+## Testing
+End-to-end tests are automated using the PyTest library and testcontainers. To setup a Python environment and start testing, ensure that Docker is installed on your system, and create a virtual environment using the following:
+
+```shell
+python -m venv .venv
+source .venv/bin/activate
+pip install -r test/requirements.txt
+```
+
+When ready to run tests:
+
+```shell
+python -m pytest test
+```
+
+
 ## Architecture
 
 ### Single Container

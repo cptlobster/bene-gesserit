@@ -1,0 +1,3 @@
+testcontainers
+requests
+pytest
