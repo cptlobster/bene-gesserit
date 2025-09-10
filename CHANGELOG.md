@@ -1,7 +1,6 @@
 # Changelog
 
 ## Unreleased
-- [anubis] Allow Anubis to be disabled.
 - [docker/prometheus] Minimized extra modules used in Prometheus build.
 - [docker] Add Trivy scanning for images built in Actions.
 

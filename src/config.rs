@@ -37,9 +37,7 @@ pub struct Config {
 /// This section configures Anubis settings.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AnubisOpts {
-    /// Whether to use Anubis to process all requests. Defaults to true.
-    #[serde(default = "default_true")]
-    enabled: bool
+
 }
 
 /// This section configures "honeypot" endpoints; Any endpoints that match these
