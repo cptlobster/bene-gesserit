@@ -17,6 +17,8 @@ pub struct Config {
     /// Configuration for the specific environment.
     #[serde(rename = "environment")]
     pub env: EnvConfOpts,
+    /// Configuration for Anubis.
+    pub anubis: AnubisOpts,
     /// Configuration for honeypots. If not specified, the honeypot generator
     /// will not be used.
     #[serde(default)]
@@ -30,6 +32,14 @@ pub struct Config {
     pub labyrinth: LabyrinthConfig,
     /// Configuration for Prometheus metrics.
     pub metrics: MetricsConfig
+}
+
+/// This section configures Anubis settings.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AnubisOpts {
+    /// Whether to use Anubis to process all requests. Defaults to true.
+    #[serde(default = "default_true")]
+    enabled: bool
 }
 
 /// This section configures "honeypot" endpoints; Any endpoints that match these
@@ -143,6 +153,5 @@ pub struct MetricsConfig {
 }
 
 /// The default grace period is 5 seconds.
-fn default_grace_seconds() -> u32 {
-    5
-}
+fn default_grace_seconds() -> u32 { 5 }
+fn default_true() -> bool { true }

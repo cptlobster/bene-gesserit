@@ -15,6 +15,12 @@ target = "http://100.126.146.26:3000"
 # placed, 
 environment = "docker"
 
+# Configuration parameters for Anubis.
+[anubis]
+# Anubis can optionally be disabled, for example if you are using Anubis
+# externally, or for testing purposes. Uncomment this line.
+#enabled = false
+
 # This section configures "honeypot" endpoints; Any endpoints that match these
 # patterns will automatically be passed into the labyrinth.
 [honeypot]

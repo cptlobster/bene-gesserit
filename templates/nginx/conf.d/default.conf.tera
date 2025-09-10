@@ -4,6 +4,7 @@ lua_shared_dict locks 100k;
 
 server {
     listen {{ env.binds.external }};
+{% if config.anubis.enabled %}
     server_name  localhost;
     {%- if env.endpoints.use_docker_resolver %}
     resolver 127.0.0.11 valid=30s;
@@ -25,6 +26,7 @@ server {
 
 server {
     listen {{ env.binds.internal }};
+{% endif %}
     server_name localhost;
     {%- if env.endpoints.use_docker_resolver %}
     resolver 127.0.0.11 valid=30s;

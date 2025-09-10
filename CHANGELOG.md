@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- [anubis] Allow Anubis to be disabled.
+- [docker/prometheus] Minimized extra modules used in Prometheus build.
+- [docker] Add Trivy scanning for images built in Actions.
 
 ## v0.1.2 - 2025-09-09
 - [labyrinth] Add delay for incrementing user violations.

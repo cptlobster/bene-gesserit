@@ -9,13 +9,14 @@ command=openresty -g "daemon off;"
 stdout_logfile=/dev/fd/1
 stdout_logfile_maxbytes=0
 redirect_stderr=true
-
+{%- if config.anubis.enabled %}
 [program:anubis]
 command=/usr/local/bin/anubis
 stdout_logfile=/dev/fd/1
 stdout_logfile_maxbytes=0
 redirect_stderr=true
 environment=BIND="{{ env.binds.anubis }}",SOCKET_MODE="0777",BIND_NETWORK="{{ env.binds.anubis_type }}",{% if config.metrics.enabled %}METRICS_BIND="{{ env.binds.metrics.anubis }}",METRICS_BIND_NETWORK="{{ env.binds.metrics.anubis_type }}",{% endif %}SERVE_ROBOTS_TXT="false",TARGET="{{ env.endpoints.internal }}"
+{%- endif %}
 
 [program:iocaine]
 command=/usr/local/bin/iocaine --config-file {{ env.targets.iocaine }}/config.toml
