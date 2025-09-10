@@ -32,3 +32,15 @@ jobs:
           push: true
           file: "Dockerfile.full"
           tags: "forge.cptlobster.dev/cptlobster/bene-gesserit:${{ forge.ref_name }}-full,forge.cptlobster.dev/cptlobster/bene-gesserit:full"
+
+  trivy:
+    runs-on: docker
+    container:
+      image: aquasec/trivy:latest
+    needs:
+      - build
+    steps:
+      - name: "Scan Image (Minimal)"
+        run: "trivy image forge.cptlobster.dev/cptlobster/bene-gesserit:${{ forge.ref_name }}"
+      - name: "Scan Image (Full)"
+        run: "trivy image forge.cptlobster.dev/cptlobster/bene-gesserit:${{ forge.ref_name }}-full"

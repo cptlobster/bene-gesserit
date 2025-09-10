@@ -67,6 +67,8 @@ docker run -d -p 9999:80 -p 9090:9090 \
     forge.cptlobster.dev/cptlobster/bene-gesserit:latest
 ```
 
+Images are scanned using Trivy for vulnerabilities. Reports are available in Actions for each image.
+
 ### Docker Compose
 
 **NOTE: These instructions are out of date and will not work.**
