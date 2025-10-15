@@ -17,3 +17,6 @@ pub mod template;
 pub mod error;
 pub mod corpus;
 pub mod environment;
+
+#[cfg(feature = "cli")]
+pub mod cli;

@@ -18,6 +18,11 @@ pub enum BGError {
     #[cfg(feature = "cli")]
     #[error("Command error: {0}")]
     ClapError(#[from] clap::Error),
+    #[cfg(feature = "cli")]
+    #[error("UNIX error: {0}")]
+    UnixError(#[from] nix::Error),
+    #[error("Integer parse error: {0}")]
+    IntParseError(#[from] std::num::ParseIntError),
     #[error("Regex error: {0}")]
     RegexError(#[from] regex::Error),
     #[error("{0}")]
