@@ -36,7 +36,7 @@ services:
 
   # caddy will route bad requests to iocaine
   iocaine:
-    image: git.madhouse-project.org/iocaine/iocaine:2.5.0
+    image: git.madhouse-project.org/iocaine/iocaine:2.5.1
     restart: unless-stopped
     volumes:
       - "./docker_include/iocaine/corpus:/etc/iocaine/corpus"

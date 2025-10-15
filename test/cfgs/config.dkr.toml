@@ -8,16 +8,18 @@
 debug = true
 
 # This target is the inevitable endpoint that your application will reach.
-#target = "http://100.126.146.26:3000"
+target = "http://localhost:80"
 # This variable specifies the configuration of your environment. It can either
 # be a string (which maps to a pre-configured environment), or a table
 # containing all the required values. The environment specifies where files are
-# placed. This will likely be configured automatically using the BG_ENVIRONMENT
-# variable, such as if you are using the Docker image.
-#environment = "docker"
+# placed, 
+environment = "docker"
 
 # Configuration parameters for Anubis.
 [anubis]
+# Anubis can optionally be disabled, for example if you are using Anubis
+# externally, or for testing purposes. Uncomment this line.
+#enabled = false
 
 # This section configures "honeypot" endpoints; Any endpoints that match these
 # patterns will automatically be passed into the labyrinth.
@@ -33,27 +35,27 @@ override_robots = true
 
 [[ratelimit.rules]]
 rule = "any"
-amount = 10
+amount = 2
 seconds = 5
 exclude = [
-    ".*.js",
-    ".*.mjs",
-    ".*.css",
+    "*.js",
+    "*.mjs",
+    "*.css",
     "^/favicon",
-    "^/icons/.*.svg"
+    "^/icons/*.svg"
 ]
 
 [[ratelimit.rules]]
 rule = "unique"
-total = 30
-unique = 10
+total = 15
+unique = 5
 seconds = 5
 exclude = [
-    ".*.js",
-    ".*.mjs",
-    ".*.css",
+    "*.js",
+    "*.mjs",
+    "*.css",
     "^/favicon",
-    "^/icons/.*.svg"
+    "^/icons/*.svg"
 ]
 
 # Configuration parameters for the labyrinth, an endless tree of Markov chain

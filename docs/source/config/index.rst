@@ -19,6 +19,11 @@ The ``config.toml``
 -------------------
 This section details the sections of the configuration file at a high level.
 
+Environment variables can be used to configure parameters outside of the file.
+Variables are named the same as the TOML keys prefixed with ``BG_``. For
+example, the ``target`` parameter can be set with the ``BG_TARGET`` environment
+variable.
+
 ``target``
 **********
 The ``target`` key is the final destination for all good requests; this is the

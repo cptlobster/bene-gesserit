@@ -1,6 +1,17 @@
 # Changelog
 
-## Unreleased
+## v0.1.3 - 2025-10-15
+- [generator] Add ability to use environment variables for configuration.
+  Parameters can be set using environment variables with the config key name 
+  prefixed by `BG_`.
+- [docker] It is no longer necessary to set the `environment` parameter in the
+  Docker image; this is configured automatically using the `BG_ENVIRONMENT`
+  variable.
+- [docker] Update dependencies in single image build:
+  - [iocaine] 2.5.0 -> 2.5.1
+  - [anubis] 1.21.3 -> 1.22.0
+- [compose] Update dependencies in example Compose stack:
+  - [iocaine] 2.5.0 -> 2.5.1
 - [docker/prometheus] Minimized extra modules used in Prometheus build.
 - [docker] Add Trivy scanning for images built in Actions.
 

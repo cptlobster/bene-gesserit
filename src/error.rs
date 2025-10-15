@@ -9,7 +9,7 @@ pub enum BGError {
     #[error("I/O Error: {0}")]
     IoError(#[from] io::Error),
     #[error("Config parse error: {0}")]
-    TomlError(#[from] toml::de::Error),
+    ParseError(#[from] figment::Error),
     #[error("JSON error: {0}")]
     JsonError(#[from] serde_json::Error),
     #[cfg(feature = "http")]

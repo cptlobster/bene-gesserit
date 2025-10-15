@@ -73,5 +73,7 @@ COPY static static
 COPY templates templates
 COPY docker-assets/overseer.sh overseer.sh
 
+ENV BG_ENVIRONMENT=docker
+
 # Use overseer script as entrypoint
 ENTRYPOINT ./overseer.sh

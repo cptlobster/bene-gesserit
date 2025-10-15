@@ -1,6 +1,6 @@
 use std::{fs::{create_dir_all, File}, io::Read, path::{Path, PathBuf}};
 use bene_gesserit::{config::Config, environment::EnvConfig, error::BGError, template, corpus};
-use env_logger::Env;
+use figment::{Figment, providers::{Format, Toml, Env}};
 use std::process::Command;
 use clap::Parser;
 
@@ -21,14 +21,13 @@ struct Cli {
 /// Main entrypoint.
 fn main() -> Result<(), BGError> {
     let cli = Cli::parse();
-    env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
     // Load and parse the configuration file.
     log::debug!("Loading configuration file...");
-    let mut cfg_file = File::open(cli.cfg_file)?;
-    log::info!("Parsing configuration...");
-    let mut buf = String::new();
-    cfg_file.read_to_string(&mut buf)?;
-    let config: Config = toml::from_str(&buf)?;
+    let config: Config = Figment::new()
+        .merge(Toml::file(cli.cfg_file))
+        .merge(Env::prefixed("BG_"))
+        .extract()?;
     let env: EnvConfig = config.env.config();
     log::debug!("Environment: {:?}", env);
     // Copy static files from static directory into target directory.
