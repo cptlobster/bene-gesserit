@@ -1,4 +1,9 @@
 # syntax: docker/dockerfile
+
+ARG IOCAINE_VERSION="2.5.1"
+ARG ANUBIS_VERSION="1.22.0"
+ARG PROMETHEUS_VERSION="3.5.0"
+
 # Rust builder image
 FROM rust:alpine AS rs_builder
 
@@ -19,9 +24,9 @@ FROM alpine:3.22 AS curler
 # Install curl
 RUN apk add --no-cache curl zstd
 
-ARG IOCAINE_VERSION="2.5.0"
-ARG ANUBIS_VERSION="1.21.3"
-ARG PROMETHEUS_VERSION="3.5.0"
+ARG IOCAINE_VERSION
+ARG ANUBIS_VERSION
+ARG PROMETHEUS_VERSION
 
 RUN curl -L -o iocaine.zst https://git.madhouse-project.org/api/packages/iocaine/generic/iocaine-binaries/${IOCAINE_VERSION}/iocaine-${IOCAINE_VERSION}.x86_64-linux.zst \
     && unzstd ./iocaine.zst \
