@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.4 - 2026-01-05
+- [docker] Update dependencies in single image build:
+  - [anubis] 1.22.0 -> 1.24.0
+- [anubis] Update bot policy to use default configuration and enable OpenGraph
+  passthrough
+
 ## v0.1.3 - 2025-10-15
 - [generator] Add ability to use environment variables for configuration.
   Parameters can be set using environment variables with the config key name 

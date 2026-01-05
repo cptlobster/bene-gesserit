@@ -42,15 +42,6 @@ would just be ``full``):
        downloading corpus files), but may be necessary for initial
        configuration.
 
-Configuration
--------------
-
-Please make sure that you have the following set in your configuration file:
-
-.. code-block:: toml
-
-   environment = "docker"
-
 Running
 -------
 

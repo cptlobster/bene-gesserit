@@ -1,6 +1,9 @@
 # syntax: docker/dockerfile
+
+# TODO: update iocaine to v3, maybe figure out how to use it for routing instead
+#       of nginx or anubis
 ARG IOCAINE_VERSION="2.5.1"
-ARG ANUBIS_VERSION="1.22.0"
+ARG ANUBIS_VERSION="1.24.0"
 ARG PROMETHEUS_VERSION="3.5.0"
 
 # Rust builder image
