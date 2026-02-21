@@ -61,8 +61,13 @@ server {
             if honeypots.is_honeypot(ngx) then
                 -- Check if the path does not end with a slash
                 local uri = ngx.var.uri;
-                if not uri:match("/$") then
-                    ngx.req.set_uri(uri .. "/", true)
+                if uri:match("([^.]*[^/])$") then
+                    local new_uri = uri .. "/"
+                    local args = ngx.var.args
+                    if args then
+                        new_uri = new_uri .. "?" .. args
+                    end
+                    return ngx.redirect(new_uri, 301)
                 end
                 {%- if config.debug %}
                 ngx.header["X-Bene-Gesserit-Violation"] = "honeypot"

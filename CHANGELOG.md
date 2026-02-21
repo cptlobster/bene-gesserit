@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.6 - 2026-02-20
+- [openresty/lua] Fix bug where trailing slash is missing from iocaine URLs
+
 ## v0.1.5 - 2026-02-20
 - [docker] Add version labels for dependent programs to image
 - [generator] Fix error caused by missing Anubis parameter
