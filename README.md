@@ -175,8 +175,8 @@ Services will provide Prometheus metrics (either internally or to an external in
       - [x] Arbitrary URL
       - [x] Project Gutenberg
       - [ ] Wikipedia
-  - [ ] Automate config injection pathing for various environments
-    - [ ] Determine what environment is in use based on environment variable or some other identifier
+  - [x] Automate config injection pathing for various environments
+    - [x] Determine what environment is in use based on environment variable or some other identifier
 - [ ] Documentation
   - [x] All Rust code should have docstrings, confusing parts should be commented
   - [x] Config file(s) should have comments
