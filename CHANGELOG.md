@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.5 - 2026-02-20
+- [docker] Add version labels for dependent programs to image
+- [generator] Fix error caused by missing Anubis parameter
+- [anubis] Fix inconsistency in Anubis cookie name
+- [labyrinth] Add slowmode option to labyrinth configuration
+
 ## v0.1.4 - 2026-01-05
 - [docker] Update dependencies in single image build:
   - [anubis] 1.22.0 -> 1.24.0

@@ -9,7 +9,7 @@ local _M = {}
 
 -- Get a client's ID from their Anubis token
 function _M.get_id(ngx)
-    local anubis_cookie = ngx.var["cookie_techaro.lol-anubis-auth-cookie-verification"]
+    local anubis_cookie = ngx.var["cookie_techaro.lol-anubis-cookie-verification"]
     return anubis_cookie
 end
 

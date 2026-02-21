@@ -17,8 +17,9 @@ pub struct Config {
     /// Configuration for the specific environment.
     #[serde(rename = "environment")]
     pub env: EnvConfOpts,
-    /// Configuration for Anubis.
-    pub anubis: AnubisOpts,
+    // Configuration for Anubis.
+    //#[serde(default)]
+    //pub anubis: AnubisOpts,
     /// Configuration for honeypots. If not specified, the honeypot generator
     /// will not be used.
     #[serde(default)]
@@ -72,6 +73,9 @@ pub struct LabyrinthConfig {
     /// violation, for banish purposes. Setting to 0 disables this.
     #[serde(default = "default_grace_seconds")]
     pub violation_delay: u32,
+    /// If enabled, limits the speed of the iocaine pipe to 64 bits per second.
+    #[serde(default)]
+    pub slowmode: bool,
     /// Configuration parameters passed through to Iocaine.
     #[serde(flatten)]
     pub iocaine: IocaineMixins

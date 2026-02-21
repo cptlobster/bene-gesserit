@@ -8,16 +8,13 @@
 debug = true
 
 # This target is the inevitable endpoint that your application will reach.
-#target = "http://100.126.146.26:3000"
+target = "http://100.126.146.26:3000"
 # This variable specifies the configuration of your environment. It can either
 # be a string (which maps to a pre-configured environment), or a table
 # containing all the required values. The environment specifies where files are
 # placed. This will likely be configured automatically using the BG_ENVIRONMENT
 # variable, such as if you are using the Docker image.
 #environment = "docker"
-
-# Configuration parameters for Anubis.
-[anubis]
 
 # This section configures "honeypot" endpoints; Any endpoints that match these
 # patterns will automatically be passed into the labyrinth.
@@ -65,6 +62,8 @@ exclude = [
 # this to 0 disables this functionality, and clients will not be permanently
 # sent into the labyrinth (just when they trigger violations).
 banish_threshold = 3
+# Uncomment this to enable slowmode. Labyrinth traffic will be limited to 32 bytes per second.
+slowmode = true
 # The file(s) used to train the Markov chain generator. These should be long
 # text files that contain a lot of words. You can select files on your computer
 # or arbitrary URLs, or use one of the pre-configured text file services (such

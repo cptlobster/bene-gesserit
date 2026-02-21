@@ -66,6 +66,15 @@ RUN go install ./cmd/...
 # Final image, contains all built dependencies
 FROM openresty/openresty:alpine AS final
 
+ARG IOCAINE_VERSION
+ARG ANUBIS_VERSION
+ARG PROMETHEUS_VERSION
+
+LABEL maintainer="Dustin Thomas <stdio@cptlobster.dev>"
+LABEL anubis_version=$ANUBIS_VERSION
+LABEL iocaine_version=$IOCAINE_VERSION
+LABEL prometheus_version=$PROMETHEUS_VERSION
+
 WORKDIR /etc/bene_gesserit
 
 # install supervisord

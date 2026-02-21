@@ -20,6 +20,9 @@ server {
 
     location @ioc {
         proxy_pass {{ env.endpoints.iocaine }};
+        {%- if config.labyrinth.slowmode %}
+        limit_rate 128;
+        {%- endif %}
     }
 }
 
@@ -67,6 +70,9 @@ server {
 
                 client = clients.increment_violations(ngx, client, {{ config.labyrinth.violation_delay }})
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
+                {%- if config.labyrinth.slowmode %}
+                ngx.var.limit_rate = "128";
+                {%- endif %}
             end
             {%- endif %}
 
@@ -94,6 +100,9 @@ server {
                 ngx.header["X-Bene-Gesserit-Violation"] = "banish"
                 {%- endif %}
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
+                {%- if config.labyrinth.slowmode %}
+                ngx.var.limit_rate = "128";
+                {%- endif %}
             end
             {%- endif %}
 
