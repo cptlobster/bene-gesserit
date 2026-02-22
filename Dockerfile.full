@@ -65,8 +65,9 @@ LABEL prometheus_version=$PROMETHEUS_VERSION
 
 WORKDIR /etc/bene_gesserit
 
-# install supervisord
-RUN apk add --no-cache supervisor
+# install supervisord and OPM deps
+RUN apk add --no-cache supervisor perl tar curl \
+    && opm install ktalebian/lua-resty-cookie
 
 # Copy compiled generator executable from builder image
 COPY --from=rs_builder /usr/local/cargo/bin/generator /usr/local/bin/generator

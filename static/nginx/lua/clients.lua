@@ -1,6 +1,7 @@
 local fileutils = require "utils/files"
 local jsontable = require "utils/jsontable"
 local cjson = require "cjson"
+local ck = require "resty.cookie"
 cjson.decode_array_with_array_mt(true)
 
 -- Functions for handling the client database. At the moment it is stored in a
@@ -9,8 +10,26 @@ local _M = {}
 
 -- Get a client's ID from their Anubis token
 function _M.get_id(ngx)
-    local anubis_cookie = ngx.var["cookie_techaro.lol-anubis-cookie-verification"]
-    return anubis_cookie
+    -- instantiate the cookie library
+    local cookie, err = ck:new()
+    if not cookie then
+        ngx.log(ngx.ERR, err)
+        return
+    end
+    
+    -- get all the cookies
+    local fields, err = cookie:get_all()
+    if not cookie then
+        ngx.log(ngx.ERR, err)
+        return
+    end
+
+    -- find the first anubis cookie that matches (since Anubis rotates cookies)
+    for k, v in pairs(fields) do
+        if k.match("^techaro.lol-anubis")
+            return v
+        end
+    end
 end
 
 -- Get a client's record

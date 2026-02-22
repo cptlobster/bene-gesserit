@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.7 - 2026-02-22
+- [openresty/lua] Fix bug where Anubis cookie name rotation breaks service
+
 ## v0.1.6 - 2026-02-20
 - [openresty/lua] Fix bug where trailing slash is missing from iocaine URLs
 
