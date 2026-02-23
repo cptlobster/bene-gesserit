@@ -163,9 +163,8 @@ pub fn gen_path(src: &CorpusSrc, target_path: &PathBuf) -> PathBuf {
             // reqwest doesn't really give me a way to guess the filename and I
             // don't feel like deconstructing URLs. so just hash the URL and
             // create a filename out of that.
-            let mut hasher = DefaultHasher::new();
-            path.hash(&mut hasher);
-            target_path.join(format!("url_{:x}.txt", hasher.finish()))
+            let digest = md5::compute(path.as_bytes());
+            target_path.join(format!("url_{:x}.txt", digest))
         },
         CorpusSrc::Gutenberg(id) => target_path.join(format!("gutenberg_{}.txt", id)),
         CorpusSrc::Path(src) => target_path.join(PathBuf::from(src).file_name().unwrap())

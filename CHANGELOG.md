@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.1.7 - 2026-02-22
+- [generator] Use MD5 to compute filenames for auto-downloaded corpus files. 
+  This should make corpus file names deterministic
 - [openresty/lua] Fix bug where Anubis cookie name rotation breaks service
 
 ## v0.1.6 - 2026-02-20
