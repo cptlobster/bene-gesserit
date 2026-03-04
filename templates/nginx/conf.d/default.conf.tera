@@ -33,14 +33,9 @@ server {
     resolver 127.0.0.11 valid=30s;
     {%- endif %}
 
-    {%- if config.honeypot.override_robots %}
+    {%- if config.honeypot.robots.generate %}
     location /robots.txt {
-        content_by_lua_block {
-            local robots = require "robots"
-            
-            ngx.header["Content-Type"] = "text/plain"
-            ngx.say(robots.generate_robots_list(ngx))
-        }
+        root {{ env.targets.nginx }}/bg_conf/robots_sandbox;
     }
     {%- endif %}
 
@@ -75,8 +70,11 @@ server {
 
                 client = clients.increment_violations(ngx, client, {{ config.labyrinth.violation_delay }})
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
-                {%- if config.labyrinth.slowmode %}
-                ngx.var.limit_rate = "128";
+                {%- if config.labyrinth.slowmode.enabled %}
+                {%- if config.labyrinth.slowmode.after %}
+                ngx.var.limit_rate_after = "{{ config.labyrinth.slowmode.after }}";
+                {%- endif %}
+                ngx.var.limit_rate = "{{ config.labyrinth.slowmode.rate }}";
                 {%- endif %}
             end
             {%- endif %}

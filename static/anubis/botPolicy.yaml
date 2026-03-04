@@ -4,7 +4,7 @@
 # - Enables OpenGraph passthrough by default
 # - Configures the backend store for the specified environment (at the moment,
 #   just in-memory. auto-configuring Redis/Valkey will be added in a later
-#   version)
+#   version, in which case this will be converted to a template)
 bots:
   - import: "(data)/meta/default-config.yaml"
 dnsbl: false

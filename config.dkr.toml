@@ -26,7 +26,14 @@ endpoints = [
 ]
 # If set to true, a robots.txt will be generated using the honeypot endpoints.
 # This will override your application's default robots.txt.
-override_robots = true
+[honeypot.robots]
+generate = true
+
+[honeypot.robots.contents]
+"*" = [
+    "/sicily",
+    "/asia"
+]
 
 [[ratelimit.rules]]
 rule = "any"
@@ -62,8 +69,9 @@ exclude = [
 # this to 0 disables this functionality, and clients will not be permanently
 # sent into the labyrinth (just when they trigger violations).
 banish_threshold = 3
-# Uncomment this to enable slowmode. Labyrinth traffic will be limited to 32 bytes per second.
-slowmode = true
+# Uncomment this to enable slowmode. Labyrinth traffic will be limited to 128 bytes per second.
+# More parameters can be configured in the labyrinth.slowmode table (limit_rate, limit_rate_after).
+slowmode.enable = true
 # The file(s) used to train the Markov chain generator. These should be long
 # text files that contain a lot of words. You can select files on your computer
 # or arbitrary URLs, or use one of the pre-configured text file services (such

@@ -34,11 +34,12 @@ end
 
 -- Get a client's record
 function _M.get_client(ngx)
+    local ip = ngx.header["X-Real-Ip"]
     local t = {}
     -- this is the sole reason we import CJSON in this file, to use an array
     -- metatable if the client is not found in the client DB
     setmetatable(t, cjson.array_mt)
-    local default = { violations = 0, last_violation = 0, requests = t }
+    local default = { ip = ip, violations = 0, last_violation = 0, requests = t }
     local id = _M.get_id(ngx)
     return jsontable.read_by_id(ngx, "/etc/nginx/bg_conf/clients", id, default)
 end

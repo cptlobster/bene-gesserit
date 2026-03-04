@@ -2,6 +2,8 @@
 //! source of truth for all configuration parameters, and should be the only
 //! place that you make configuration changes for the application. The generator
 //! script will handle creating other configuration files.
+
+use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
 use std::path::PathBuf;
 use crate::environment::EnvConfOpts;
@@ -48,7 +50,39 @@ pub struct HoneypotConfig {
     /// A set of regex patterns for paths to match.
     pub endpoints: Vec<String>,
     #[serde(default)]
-    pub override_robots: bool
+    pub robots: RobotsConfig
+}
+
+/// This section defines the generation of the robots.txt file.
+/// At the moment it is very manual; due to how the patterns work, we need to
+/// either figure out how to automatically generate paths to use in the robots
+/// file or we need to write them ourselves. We'll handle the former in a later
+/// update.
+#[derive(Serialize, Deserialize, Debug, Default)]
+pub struct RobotsConfig {
+    /// Whether to use the service defined robots.txt file. If disabled, passes through to the
+    /// backend's robots.txt.
+    #[serde(default)]
+    pub generate: bool,
+    /// Define the contents of the robots.txt file. This consists of a dictionary where the keys are
+    /// user agent strings and the values are lists of URI paths, like so:
+    /// ```toml
+    /// [honeypot.robots.contents]
+    /// "*" = ["/sicily", "/asia"] # disallow any user agent
+    /// "GoogleBot" = ["/sicily", "/asia"] # disallow GoogleBot specifically
+    /// ```
+    /// This example generates the following robots.txt file:
+    /// ```text
+    /// User-Agent: *
+    /// Disallow: /sicily
+    /// Disallow: /asia
+    ///
+    /// User-Agent: GoogleBot
+    /// Disallow: /sicily
+    /// Disallow: /asia
+    /// ```
+    #[serde(default)]
+    pub contents: HashMap<String, Vec<String>>
 }
 
 /// This section configures a set of rate limiting rules.
@@ -75,10 +109,24 @@ pub struct LabyrinthConfig {
     pub violation_delay: u32,
     /// If enabled, limits the speed of the iocaine pipe to 64 bits per second.
     #[serde(default)]
-    pub slowmode: bool,
+    pub slowmode: SlowModeConfig,
     /// Configuration parameters passed through to Iocaine.
     #[serde(flatten)]
     pub iocaine: IocaineMixins
+}
+
+/// Configuration for labyrinth slow mode. If enabled, limits the speed of labyrinth traffic.
+/// Meant to slow down traffic for bots and scrapers in order to waste their time.
+#[derive(Serialize, Deserialize, Debug, Default)]
+pub struct SlowModeConfig {
+    /// Enable or disable the rate limit for the labyrinth.
+    pub enable: bool,
+    /// Apply the rate limit after this amount of bytes has been transferred.
+    #[serde(alias="limit_rate_after", default="default_limit_rate_after")]
+    pub after: Option<String>,
+    /// After the initial data is transferred, limit rate at this speed.
+    #[serde(alias="limit_rate", default="default_limit_rate")]
+    pub rate: Option<String>
 }
 
 /// Configuration for Iocaine.
@@ -157,3 +205,5 @@ pub struct MetricsConfig {
 /// The default grace period is 5 seconds.
 fn default_grace_seconds() -> u32 { 5 }
 fn default_true() -> bool { true }
+fn default_limit_rate_after() -> Option<String> { Some("256".to_string()) }
+fn default_limit_rate() -> Option<String> { Some("128".to_string()) }

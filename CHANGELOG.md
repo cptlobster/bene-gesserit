@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- [honeypot] Generate robots.txt at compile-time from a pre-defined list of files.
+- [labyrinth] Add configuration options for slowmode (`limit_rate`, `limit_rate_after`)
+- [openresty/lua] Log client IP addresses along with Anubis cookie, for future use (i.e. fail2ban style IP filtering)
+
 ## v0.1.7 - 2026-02-22
 - [generator] Use MD5 to compute filenames for auto-downloaded corpus files. 
   This should make corpus file names deterministic
