@@ -3,7 +3,7 @@ Configuring Underlying Services
 
 Bene Gesserit is a combination of multiple services; as such, they have
 differing syntax and structures for their configuration files. Therefore, Bene
-Gesserit provides a configuration utility that provides the important parameters
+Gesserit provides a configuration generator that provides the important parameters
 in one configuration file, and then maps parameters to their respective
 application configurations.
 

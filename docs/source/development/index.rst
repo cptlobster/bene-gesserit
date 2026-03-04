@@ -10,3 +10,4 @@ code for Bene Gesserit, this guide should help you to get started.
    
    config.rst
    testing.rst
+   roadmap.rst

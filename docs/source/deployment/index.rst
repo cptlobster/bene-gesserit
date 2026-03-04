@@ -10,3 +10,5 @@ There are multiple ways to deploy Bene Gesserit. Please refer to
 
    compose.rst
    docker.rst
+   distributed.rst
+   metrics.rst

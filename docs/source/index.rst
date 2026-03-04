@@ -39,4 +39,5 @@ for more information.
    deployment/index.rst
    config/index.rst
    development/index.rst
+   legal/index.rst
 

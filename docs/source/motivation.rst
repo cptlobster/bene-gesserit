@@ -24,13 +24,28 @@ for big tech companies with fat bankrolls, and could harm smaller, legitimate
 web crawling operations (such as alternative search engines or fediverse social
 media).
 
-bene-gesserit doesn't just feed AI scrapers irrelevant content; it gives them a
+bene-gesserit doesn't just feed AI scrapers irrelevant content that they can then use for training; it gives them a
 stream of Markov-chain generated nonsense that will waste their time and poison
 their training data. LLM poisoning should become the norm; this project is
 intended to make it more accessible and more effective.
 
-Name
-----
+Objectives
+----------
+
+- Provide a fully self-contained LLM scraper defense proxy that can be quickly deployed in front of existing services
+  on a variety of infrastructure (Docker, Kubernetes, Nix, cloud providers such as AWS, et al.).
+- Make the service as "batteries included" as possible, where the default configuration provides a balanced defense
+  while still allowing room for refinement.
+- Be as decentralized as possible; the proxy should be fully self-hosted and should only rely on requests to free/open
+  third-party resources with administrator permission.
+- Minimize failures in production as much as possible upon release; follow `SemVer <https://semver.org/>` standards for
+  marking breaking changes, implement testing of common functionality throughout the development pipeline, and regularly
+  examine security of dependencies and application.
+- Assure privacy of user data by only collecting information required for proxy operation; for information that must be
+  persisted, only store it on the local instance for administrator use (i.e. adjusting rules, sending abuse reports)
+
+Name Origin
+-----------
 
 bene-gesserit's naming comes from the *Dune* series, by Frank Herbert:
 

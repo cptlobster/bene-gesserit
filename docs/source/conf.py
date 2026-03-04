@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'bene-gesserit'
-copyright = '2025-%y'
+copyright = '2025-%Y Dustin Thomas. Licensed under the GNU General Public License, version 3'
 author = 'Dustin Thomas'
 
 # -- General configuration ---------------------------------------------------
