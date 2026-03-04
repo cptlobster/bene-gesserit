@@ -8,6 +8,7 @@ Synchronizing Data Between Replicas
 -----------------------------------
 In order to facilitate synchronization between all services, Bene Gesserit will support Redis (or compatible
 alternatives such as Valkey) as an in-memory key/value store for the following reasons:
+
 - `Anubis has native Redis support <https://anubis.techaro.lol/docs/admin/policies/#storage-backends>`_
 - `OpenResty has a package for Redis <https://opm.openresty.org/package/openresty/lua-resty-redis/>`_
 
