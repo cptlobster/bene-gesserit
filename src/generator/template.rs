@@ -8,7 +8,7 @@
 //! - `words`: The word list file, normalized to its target location.
 use std::{fs::{create_dir_all, File}, io::Write, path::{Component, PathBuf}};
 use tera::{Context, Tera};
-use crate::{config::{Config, RatelimitRule}, corpus, environment::EnvConfig, error::BGError};
+use crate::{config::{Config, RatelimitRule}, generator::{corpus, environment::EnvConfig}, error::BGError};
 
 /// Render all available configuration files and place them in their target
 /// directories.

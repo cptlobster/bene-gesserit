@@ -6,7 +6,7 @@
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
 use std::path::PathBuf;
-use crate::environment::EnvConfOpts;
+use crate::generator::environment::EnvConfOpts;
 
 /// The config object that contains all subconfiguration parameters.
 #[derive(Serialize, Deserialize, Debug)]

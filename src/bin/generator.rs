@@ -1,5 +1,5 @@
 use std::{fs::{create_dir_all, File}, io::Read, path::{Path, PathBuf}};
-use bene_gesserit::{config::Config, environment::EnvConfig, error::BGError, template, corpus};
+use bene_gesserit::{config::Config, generator::{environment::EnvConfig, template, corpus}, error::BGError};
 use figment::{Figment, providers::{Format, Toml, Env}};
 use std::process::Command;
 use clap::Parser;

@@ -1,0 +1,11 @@
+{%- if config.honeypot.robots.generate -%}
+{%- for user_agent, routes in config.honeypot.robots.contents -%}
+User-Agent: {{ user_agent }}
+{%- for route in routes %}
+Disallow: {{ route }}
+{%- endfor -%}
+{%- if not loop.last %}
+
+{%- endif %}
+{%- endfor %}
+{%- endif %}
