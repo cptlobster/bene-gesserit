@@ -1,9 +1,11 @@
 # syntax: docker/dockerfile
 
+ARG BENE_GESSERIT_VERSION="0.1.8"
+
 # TODO: update iocaine to v3, maybe figure out how to use it for routing instead
 #       of nginx or anubis
 ARG IOCAINE_VERSION="2.5.1"
-ARG ANUBIS_VERSION="1.24.0"
+ARG ANUBIS_VERSION="1.25.0"
 ARG PROMETHEUS_VERSION="3.5.0"
 
 # Rust builder image
@@ -18,7 +20,9 @@ COPY Cargo.toml ./Cargo.toml
 COPY Cargo.lock ./Cargo.lock
 
 # Compile the generator executable
-RUN cargo install --features="cli" --path .
+RUN --mount=type=cache,target=/usr/local/cargo/registry,id=cargo-registry \
+    --mount=type=cache,target=/usr/src/bene-gesserit/target,id=build-target \
+    cargo install --features="cli" --path .
 
 # Curler image (downloads binaries for component programs)
 FROM alpine:3.22 AS curler
@@ -69,17 +73,21 @@ FROM openresty/openresty:alpine AS final
 ARG IOCAINE_VERSION
 ARG ANUBIS_VERSION
 ARG PROMETHEUS_VERSION
+ARG BENE_GESSERIT_VERSION
 
 LABEL maintainer="Dustin Thomas <stdio@cptlobster.dev>"
-LABEL anubis_version=$ANUBIS_VERSION
-LABEL iocaine_version=$IOCAINE_VERSION
-LABEL prometheus_version=$PROMETHEUS_VERSION
+LABEL anubis.version=$ANUBIS_VERSION
+LABEL iocaine.version=$IOCAINE_VERSION
+LABEL prometheus.version=$PROMETHEUS_VERSION
+LABEL bene_gesserit.version=$BENE_GESSERIT_VERSION
+LABEL bene_gesserit.variant="minimal"
 
 WORKDIR /etc/bene_gesserit
 
 # install supervisord and OPM deps
 RUN apk add --no-cache supervisor perl tar curl \
-    && opm install ktalebian/lua-resty-cookie
+    && opm install ktalebian/lua-resty-cookie \
+    && apk del perl tar curl
 
 # Copy compiled generator executable from builder image
 COPY --from=rs_builder /usr/local/cargo/bin/generator /usr/local/bin/generator
@@ -101,5 +109,5 @@ COPY docker-assets/overseer.sh overseer.sh
 
 ENV BG_ENVIRONMENT=docker
 
-# Use overseer script as entrypoint
-ENTRYPOINT ./overseer.sh
+# Run overseer script on image launch
+CMD [ "./overseer.sh" ]
