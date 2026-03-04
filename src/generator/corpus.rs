@@ -3,7 +3,6 @@
 use std::fs::{copy, create_dir_all};
 use std::path::PathBuf;
 use crate::{config::CorpusSrc, error::BGError};
-use std::hash::{DefaultHasher, Hash, Hasher};
 #[cfg(feature = "http")]
 use std::fs::File;
 #[cfg(feature = "http")]
@@ -15,32 +14,31 @@ use reqwest::{blocking::Client, StatusCode};
 
 /// Download many corpus files. Reuses the same client to avoid recreating it
 /// several times.
-#[cfg(feature = "http")]
 pub fn get_many(src: &Vec<CorpusSrc>, target_dir: &PathBuf) -> Result<(), BGError> {
-    let client = Client::new();
-    src.iter().map(|src| get(&client, src, target_dir)).collect::<Result<(), BGError>>()
-}
-
-/// Download many corpus files. Reuses the same client to avoid recreating it
-/// several times.
-#[cfg(not(feature = "http"))]
-pub fn get_many(src: &Vec<CorpusSrc>, target_dir: &PathBuf) -> Result<(), BGError> {
-    log::warn!("This version of bene-gesserit is compiled without HTTP support. Requests for corpus files that are not downloaded will fail.");
-    src.iter().map(|src| get_nohttp(src, target_dir)).collect::<Result<(), BGError>>()
+    #[cfg(feature = "http")]
+    {
+        let client = Client::new();
+        src.iter().map(|src| get(&client, src, target_dir)).collect::<Result<(), BGError>>()
+    }
+    #[cfg(not(feature = "http"))]
+    {
+        log::warn!("This version of bene-gesserit is compiled without HTTP support. Requests for corpus files that are not downloaded will fail.");
+        src.iter().map(|src| get_nohttp(src, target_dir)).collect::<Result<(), BGError>>()
+    }
 }
 
 /// Download one corpus file.
-#[cfg(feature = "http")]
 pub fn get_one(src: &CorpusSrc, target_dir: &PathBuf) -> Result<(), BGError> {
-    let client = Client::new();
-    get(&client, src, target_dir)
-}
-
-/// Download one corpus file.
-#[cfg(not(feature = "http"))]
-pub fn get_one(src: &CorpusSrc, target_dir: &PathBuf) -> Result<(), BGError> {
-    log::warn!("This version of bene-gesserit is compiled without HTTP support. Requests for corpus files that are not downloaded will fail.");
-    get_nohttp(src, target_dir)
+    #[cfg(feature = "http")]
+    {
+        let client = Client::new();
+        get(&client, src, target_dir)
+    }
+    #[cfg(not(feature = "http"))]
+    {
+        log::warn!("This version of bene-gesserit is compiled without HTTP support. Requests for corpus files that are not downloaded will fail.");
+        get_nohttp(src, target_dir)
+    }
 }
 
 /// Obtain a corpus file from its source, apply custom handling functions, and
