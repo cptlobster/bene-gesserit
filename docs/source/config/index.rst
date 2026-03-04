@@ -46,6 +46,8 @@ Configuration for the Iocaine labyrinth. This includes setting up a corpus for
 the Markov chain to train from, a word list for link titles, and a violation
 threshold for banishing clients permanently to the labyrinth.
 
+See :ref:`The Labyrinth` for configuration instructions.
+
 ``honeypot``
 ************
 Configuration for "honeypot" endpoints; Ideally you would create hidden links to
@@ -60,4 +62,5 @@ Configuration for using Prometheus metrics.
    :caption: Additional Pages:
 
    ratelimit.rst
+   labyrinth.rst
    custom_env.rst
