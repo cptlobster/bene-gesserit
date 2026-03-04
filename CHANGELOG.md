@@ -1,9 +1,13 @@
 # Changelog
 
 ## Unreleased
-- [honeypot] Generate robots.txt at compile-time from a pre-defined list of files.
+- [honeypot] Generate robots.txt at generation time from a user-defined list of endpoints.
 - [labyrinth] Add configuration options for slowmode (`limit_rate`, `limit_rate_after`)
 - [openresty/lua] Log client IP addresses along with Anubis cookie, for future use (i.e. fail2ban style IP filtering)
+- [openresty/lua] Use client IP address as a fallback client identifier if the Anubis cookie is missing
+- [docker] Improve caching for Docker builds
+- [docker] Update dependencies in single image build:
+  - [anubis] 1.24.0 -> 1.25.0
 
 ## v0.1.7 - 2026-02-22
 - [generator] Use MD5 to compute filenames for auto-downloaded corpus files. 

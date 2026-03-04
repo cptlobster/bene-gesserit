@@ -8,33 +8,50 @@ cjson.decode_array_with_array_mt(true)
 -- single JSON file. This needs to be improved significantly at some point.
 local _M = {}
 
+function _M.fallback_id(ngx)
+    ngx.log(ngx.WARN, "Falling back to IP-based identification...")
+    local headers = ngx.req.get_headers()
+    local ip = headers["x-real-ip"]
+    if not ip then
+        ngx.log(ngx.ERR, "No IP address found. Dumping headers")
+        ngx.log(ngx.ERR, cjson.encode(headers))
+        return
+    end
+    return "ip-" .. string.gsub(ip, "%.", "-")
+end
+
 -- Get a client's ID from their Anubis token
 function _M.get_id(ngx)
     -- instantiate the cookie library
     local cookie, err = ck:new()
     if not cookie then
         ngx.log(ngx.ERR, err)
-        return
+        return _M.fallback_id(ngx)
     end
     
     -- get all the cookies
     local fields, err = cookie:get_all()
     if not fields then
         ngx.log(ngx.ERR, err)
-        return
+        ngx.log(ngx.WARN, "Falling back to IP-based identification...")
+        return _M.fallback_id(ngx)
     end
 
     -- find the first anubis cookie that matches (since Anubis rotates cookies)
     for k, v in pairs(fields) do
-        if k:match("^techaro%.lol%-anubis") then
-            return v
+        if k:match("^techaro%.lol%-anubis%-cookie") then
+            return "anb-" .. v
         end
     end
+
+    -- if there is no anubis cookie (i.e. curl), use the X-Real-Ip header as the ID. Less precise, but should work
+    return _M.fallback_id(ngx)
 end
 
 -- Get a client's record
 function _M.get_client(ngx)
-    local ip = ngx.header["X-Real-Ip"]
+    local headers = ngx.req.get_headers()
+    local ip = headers["x-real-ip"]
     local t = {}
     -- this is the sole reason we import CJSON in this file, to use an array
     -- metatable if the client is not found in the client DB
