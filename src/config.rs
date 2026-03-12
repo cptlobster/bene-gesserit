@@ -40,7 +40,14 @@ pub struct Config {
 /// This section configures Anubis settings.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AnubisOpts {
+    #[serde(default)]
+    predef_rules: AnubisPredefRules
+}
 
+
+#[derive(Serialize, Deserialize, Debug, Default)]
+pub struct AnubisPredefRules {
+    block_cf_bots: bool
 }
 
 /// This section configures "honeypot" endpoints; Any endpoints that match these

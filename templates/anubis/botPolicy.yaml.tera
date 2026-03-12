@@ -4,9 +4,14 @@
 # - Enables OpenGraph passthrough by default
 # - Configures the backend store for the specified environment (at the moment,
 #   just in-memory. auto-configuring Redis/Valkey will be added in a later
-#   version, in which case this will be converted to a template)
+#   version)
 bots:
   - import: "(data)/meta/default-config.yaml"
+{%- if config.anubis.add_rules.block_cf_crawl %}
+  - name: "block-cf-crawl"
+    action: DENY
+    expression: '"cf-brapi-request-id" in headers'
+{%- endif %}
 dnsbl: false
 status_codes:
   CHALLENGE: 200
