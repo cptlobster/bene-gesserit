@@ -19,9 +19,9 @@ pub struct Config {
     /// Configuration for the specific environment.
     #[serde(rename = "environment")]
     pub env: EnvConfOpts,
-    // Configuration for Anubis.
-    //#[serde(default)]
-    //pub anubis: AnubisOpts,
+    /// Configuration for Anubis.
+    #[serde(default)]
+    pub anubis: AnubisOpts,
     /// Configuration for honeypots. If not specified, the honeypot generator
     /// will not be used.
     #[serde(default)]
@@ -38,7 +38,7 @@ pub struct Config {
 }
 
 /// This section configures Anubis settings.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Default)]
 pub struct AnubisOpts {
     #[serde(default)]
     predef_rules: AnubisPredefRules
@@ -47,6 +47,7 @@ pub struct AnubisOpts {
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct AnubisPredefRules {
+    #[serde(default)]
     block_cf_bots: bool
 }
 
