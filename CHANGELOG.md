@@ -9,6 +9,7 @@
 - [labyrinth] Add configuration options for slowmode (`limit_rate`, `limit_rate_after`)
 - [labyrinth] Error on unsupported `Content-Type`, to be extended for other `Content-Type`s in the future (i.e. plain
   text and Markdown via Pandoc, image and audio generation using other tools)
+- [openresty] Fix `X-Real-Ip` header not being set correctly on recursive proxy passthroughs
 - [openresty/lua] Log client IP addresses along with Anubis cookie, for future use (i.e. fail2ban style IP filtering)
 - [openresty/lua] Use client IP address as a fallback client identifier if the Anubis cookie is missing
 - [docker] Improve caching for Docker builds
