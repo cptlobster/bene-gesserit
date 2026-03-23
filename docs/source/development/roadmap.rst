@@ -21,7 +21,7 @@ Proxy Protection Features
         2026-03-04: IPs are now recorded alongside client ID in client logs, this is the first step in logging
         offenders.
       - In Progress
-      -
+      - 0.2.0
     * - ASN / Country Lookup
       - Lookup IP address in a BGP Autonomous System to gather ASN / country information in order to identify specific
         providers. This will allow automatically banning specific providers for repeated violations, as well as for
@@ -40,6 +40,41 @@ Proxy Protection Features
         - NodeJS
         - Hugo
         - WordPress
+      - Not Started
+      -
+
+Labyrinth Features
+------------------
+.. list-table::
+    :header-rows: 1
+    :stub-columns: 1
+
+    * - Name
+      - Description
+      - Status
+      - Planned Release
+    * - Support other Text Content Types
+      - Currently Iocaine only outputs ``text/html`` content. Make it possible to transform text into other formats,
+        likely using Pandoc. This will likely include plaintext and Markdown.
+      - Not Started
+      -
+    * - Image Generation
+      - Develop a way to cheaply generate useless images in order to handle requests with image content types.
+      - Not Started
+      -
+    * - Audio Generation
+      - Develop a way to cheaply generate useless audio in order to handle requests with audio content types.
+      - Not Started
+      -
+    * - API Mocking
+      - Develop a way to cheaply mock an API based on an OpenAPI or Swagger specification. Maybe use
+        `regenexp <https://forge.cptlobster.dev/cptlobster/regenexp>`_ as a way to generate slop text automatically.
+      - Not Started
+      -
+    * - Upgrade Iocaine to Latest Version
+      - Find a way to upgrade Iocaine to the latest version without breaking everything. Maybe also utilize Iocaine's
+        new features for bot detection as part of the Bene Gesserit pipeline, even though most detection is handled by
+        Anubis (maybe move some of the logic implemented in NGINX's Lua down to Iocaine)
       - Not Started
       -
 
