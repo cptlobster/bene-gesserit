@@ -1,8 +1,14 @@
 # Changelog
 
 ## Unreleased
+- [anubis] Support adding custom rules to Anubis
+  - [anubis/rules] Add optional rule to deny all requests from
+    [Cloudflare `/crawl` jobs](https://developers.cloudflare.com/changelog/post/2026-03-10-br-crawl-endpoint/). This
+    rule is disabled by default but can be enabled by setting `anubis.predef_rules.block_cf_bots` to `true`.
 - [honeypot] Generate robots.txt at generation time from a user-defined list of endpoints.
 - [labyrinth] Add configuration options for slowmode (`limit_rate`, `limit_rate_after`)
+- [labyrinth] Error on unsupported `Content-Type`, to be extended for other `Content-Type`s in the future (i.e. plain
+  text and Markdown via Pandoc, image and audio generation using other tools)
 - [openresty/lua] Log client IP addresses along with Anubis cookie, for future use (i.e. fail2ban style IP filtering)
 - [openresty/lua] Use client IP address as a fallback client identifier if the Anubis cookie is missing
 - [docker] Improve caching for Docker builds

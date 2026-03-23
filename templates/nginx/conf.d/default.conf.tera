@@ -30,6 +30,17 @@ server {
         {%- endif %}
         limit_rate {{ config.labyrinth.slowmode.rate }};
         {%- endif %}
+
+        access_by_lua_block {
+            -- the labyrinth only returns HTML
+            -- TODO: make other content types supported using Pandoc and other tools
+            local content_type = ngx.var.http_content_type
+            if not string.match(content_type, "^text/html") then
+                ngx.log(ngx.INFO, content_type)
+                ngx.header["Accept"] = "text/html"
+                ngx.exit(415)
+            end
+        }
     }
 }
 
@@ -82,6 +93,15 @@ server {
                 ngx.header["X-Bene-Gesserit-Violation"] = "honeypot"
                 {%- endif %}
 
+                -- the labyrinth only returns HTML
+                -- TODO: make other content types supported using Pandoc and other tools
+                local content_type = ngx.var.http_content_type
+                if not string.match(content_type, "^text/html") then
+                    ngx.log(ngx.INFO, content_type)
+                    ngx.header["Accept"] = "text/html"
+                    ngx.exit(415)
+                end
+
                 client = clients.increment_violations(ngx, client, {{ config.labyrinth.violation_delay }})
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
                 {%- if config.labyrinth.slowmode.enabled %}
@@ -116,6 +136,16 @@ server {
                 {%- if config.debug %}
                 ngx.header["X-Bene-Gesserit-Violation"] = "banish"
                 {%- endif %}
+
+                -- the labyrinth only returns HTML
+                -- TODO: make other content types supported using Pandoc and other tools
+                local content_type = ngx.var.http_content_type
+                if not string.match(content_type, "^text/html") then
+                    ngx.log(ngx.INFO, content_type)
+                    ngx.header["Accept"] = "text/html"
+                    ngx.exit(415)
+                end
+
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
                 {%- if config.labyrinth.slowmode.enabled %}
                 {%- if config.labyrinth.slowmode.after %}
