@@ -39,7 +39,7 @@ function _M.get_id(ngx)
 
     -- find the first anubis cookie that matches (since Anubis rotates cookies)
     for k, v in pairs(fields) do
-        if k:match("^techaro%.lol%-anubis%-cookie") then
+        if k:match("^techaro%.lol%-anubis") then
             return "anb-" .. v
         end
     end
