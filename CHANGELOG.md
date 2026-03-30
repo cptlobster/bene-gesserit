@@ -11,6 +11,15 @@
   text and Markdown via Pandoc, image and audio generation using other tools)
 - [openresty] Fix `X-Real-Ip` header not being set correctly on recursive proxy passthroughs
 - [openresty/lua] Log client IP addresses along with Anubis cookie, for future use (i.e. fail2ban style IP filtering)
+- [openresty/lua] Make detecting the client ID from Anubis more consistent. It will decode the JWT and read the 
+  challenge ID if available, and will search for cookies based on the actual expected names rather than with a wildcard.
+  After inspecting the Anubis source code, it doesn't appear to rotate cookie names like I initially thought.
+  - This makes identifying clients from Anubis more consistent, as before it would sometimes use the JWT and sometimes
+    use the UUID from `techaro.lol-anubis-cookie-verification`. This would mean a client would have two separate
+    entries.
+  - This also eliminates a potential denial-of-service attack vector that can be exploited by naming cookies with the
+    same prefix with specially crafted IDs, which with 256 concurrent requests could lock the entire JSON table used for
+    user identification.
 - [openresty/lua] Use client IP address as a fallback client identifier if the Anubis cookie is missing
 - [docker] Improve caching for Docker builds
 - [docker] Update dependencies in single image build:
