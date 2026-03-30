@@ -10,7 +10,12 @@
 - [labyrinth] Error on unsupported `Content-Type`, to be extended for other `Content-Type`s in the future (i.e. plain
   text and Markdown via Pandoc, image and audio generation using other tools)
 - [openresty] Fix `X-Real-Ip` header not being set correctly on recursive proxy passthroughs
-- [openresty/lua] Log client IP addresses along with Anubis cookie, for future use (i.e. fail2ban style IP filtering)
+- [openresty/lua] Log client IP addresses along with Anubis cookie
+- [openresty/lua] Add IP banning functionality. Also tracks violations for IP addresses and regions, and bans them once
+  they exceed the configured threshold.
+  - This will be expanded later to allow for matching ASNs and countries, and to make more flexible (i.e. violations
+    over a certain period of time)
+  - This is disabled by default, and can be enabled with the `ipban.enabled` config option.
 - [openresty/lua] Make detecting the client ID from Anubis more consistent. It will decode the JWT and read the 
   challenge ID if available, and will search for cookies based on the actual expected names rather than with a wildcard.
   After inspecting the Anubis source code, it doesn't appear to rotate cookie names like I initially thought.

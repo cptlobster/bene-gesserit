@@ -75,6 +75,9 @@ server {
             local honeypots = require "honeypots"
             local clients = require "clients"
             local ratelimit = require "ratelimit"
+            {%- if config.ipban.enabled %}
+            local ipban = require "ipban"
+            {%- endif %}
 
             -- load client data
             local client = clients.get_client(ngx)
@@ -111,6 +114,9 @@ server {
                 end
 
                 client = clients.increment_violations(ngx, client, {{ config.labyrinth.violation_delay }})
+                {%- if config.ipban.enabled %}
+                ipban.increment_violation(ngx, client)
+                {%- endif %}
                 ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
                 {%- if config.labyrinth.slowmode.enabled %}
                 {%- if config.labyrinth.slowmode.after %}
@@ -125,6 +131,9 @@ server {
             local try_after = ratelimit.check_ratelimit(ngx, client)
             if try_after > 0 then
                 client = clients.increment_violations(ngx, client, {{ config.labyrinth.violation_delay }})
+                {%- if config.ipban.enabled %}
+                ipban.increment_violation(ngx, client)
+                {%- endif %}
                 clients.update_record(ngx, client)
                 
                 ngx.header["Retry-After"] = try_after
@@ -143,6 +152,32 @@ server {
             if client["violations"] >= {{ config.labyrinth.banish_threshold }} then
                 {%- if config.debug %}
                 ngx.header["X-Bene-Gesserit-Violation"] = "banish"
+                {%- endif %}
+
+                -- the labyrinth only returns HTML
+                -- TODO: make other content types supported using Pandoc and other tools
+                local content_type = ngx.var.http_content_type
+                if not string.match(content_type, "^text/html") then
+                    ngx.log(ngx.INFO, content_type)
+                    ngx.header["Accept"] = "text/html"
+                    ngx.exit(415)
+                end
+
+                ngx.var.upstream_target = "{{ env.endpoints.iocaine }}"
+                {%- if config.labyrinth.slowmode.enabled %}
+                {%- if config.labyrinth.slowmode.after %}
+                ngx.var.limit_rate_after = "{{ config.labyrinth.slowmode.after }}";
+                {%- endif %}
+                ngx.var.limit_rate = "{{ config.labyrinth.slowmode.rate }}";
+                {%- endif %}
+            end
+            {%- endif %}
+
+            {%- if config.ipban.enabled %}
+            -- handle IP bans
+            if ipban.is_banned(ngx, client, {{ config.ipban.limits.client }}, {{ config.ipban.limits.region }}) then
+                {%- if config.debug %}
+                ngx.header["X-Bene-Gesserit-Violation"] = "ipban"
                 {%- endif %}
 
                 -- the labyrinth only returns HTML

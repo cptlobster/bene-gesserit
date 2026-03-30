@@ -30,10 +30,15 @@ pub struct Config {
     /// used.
     #[serde(default)]
     pub ratelimit: Option<RatelimitConfig>,
+    /// Configuration for IP address banning.
+    #[serde(default)]
+    pub ipban: IpBanConfig,
     /// Configuration parameters for the labyrinth, an endless tree of Markov
-    /// chain generated nonsense. These configurations are used for Iocaine.
+    /// chain generated nonsense. These configurations are used for Iocaine, or for NGINX rules
+    /// related to Iocaine.
     pub labyrinth: LabyrinthConfig,
     /// Configuration for Prometheus metrics.
+    #[serde(default)]
     pub metrics: MetricsConfig
 }
 
@@ -98,6 +103,22 @@ pub struct RobotsConfig {
 pub struct RatelimitConfig {
     #[serde(default)]
     pub rules: Vec<RatelimitRule>
+}
+
+#[derive(Default, Serialize, Deserialize, Debug)]
+pub struct IpBanConfig {
+    #[serde(default)]
+    enabled: bool,
+    #[serde(default)]
+    limits: IpBanLimits
+}
+
+#[derive(Default, Serialize, Deserialize, Debug)]
+pub struct IpBanLimits {
+    #[serde(default = "default_client_ipban")]
+    client: u32,
+    #[serde(default = "default_region_ipban")]
+    region: u32
 }
 
 /// Configuration parameters for the labyrinth, an endless tree of Markov chain
@@ -210,8 +231,16 @@ pub struct MetricsConfig {
     pub enabled: bool
 }
 
+impl Default for MetricsConfig {
+    fn default() -> Self {
+        MetricsConfig { enabled: false }
+    }
+}
+
 /// The default grace period is 5 seconds.
 fn default_grace_seconds() -> u32 { 5 }
 fn default_true() -> bool { true }
 fn default_limit_rate_after() -> Option<String> { Some("256".to_string()) }
 fn default_limit_rate() -> Option<String> { Some("128".to_string()) }
+fn default_client_ipban() -> u32 { 10 }
+fn default_region_ipban() -> u32 { 100 }

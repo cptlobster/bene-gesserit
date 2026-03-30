@@ -60,6 +60,14 @@ exclude = [
     "^/icons/.*.svg"
 ]
 
+# Configuration parameters for IP banning.
+[ipban]
+enabled = true
+# Optionally you can configure the violation limit. Tune this for your client violation threshold. The defaults are 10
+# for clients and 100 for regions
+#limits.client = 10
+#limits.region = 100
+
 # Configuration parameters for the labyrinth, an endless tree of Markov chain
 # generated nonsense. These configurations are used for Iocaine.
 [labyrinth]
