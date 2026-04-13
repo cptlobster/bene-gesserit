@@ -72,7 +72,7 @@ function _M.get_id(ngx)
             local payload_end = string.find(v, ".", payload_start + 1, true)
 
             -- decode the payload
-            local payload = cjson:decode(base64.decode(string.sub(v, payload_start, payload_end)))
+            local payload = cjson.decode(base64.decode(string.sub(v, payload_start, payload_end)))
 
             if payload ~= nil then
                 if payload["challenge"] ~= nil then
