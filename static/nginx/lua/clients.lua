@@ -68,7 +68,7 @@ function _M.get_id(ngx)
         if k == ANUBIS_JWT then
             -- get boundary of JWT payload
             local payload_start = string.find(v, ".", 1, true)
-            local payload_end = string.find(v, ".", start + 1, true)
+            local payload_end = string.find(v, ".", payload_start + 1, true)
 
             -- decode the payload
             local payload = cjson:decode(string.sub(v, payload_start, payload_end))
