@@ -1,5 +1,6 @@
 local fileutils = require "utils/files"
 local jsontable = require "utils/jsontable"
+local base64 = require "utils/base64"
 local cjson = require "cjson"
 local ck = require "resty.cookie"
 cjson.decode_array_with_array_mt(true)
@@ -71,7 +72,7 @@ function _M.get_id(ngx)
             local payload_end = string.find(v, ".", payload_start + 1, true)
 
             -- decode the payload
-            local payload = cjson:decode(string.sub(v, payload_start, payload_end))
+            local payload = cjson:decode(base64:decode(string.sub(v, payload_start, payload_end)))
 
             if payload ~= nil then
                 if payload["challenge"] ~= nil then
