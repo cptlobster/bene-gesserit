@@ -5,7 +5,7 @@ local _M = {}
 local INDEX_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 
 -- Encode a string into base64.
-function encode(data)
+function _M.encode(data)
     return ((data:gsub('.', function(x)
         local r, b = '', x:byte()
         for i=8,1,-1 do r = r .. (b % 2 ^ i - b % 2 ^ (i - 1) > 0 and '1' or '0') end
@@ -19,7 +19,7 @@ function encode(data)
 end
 
 -- Decode a string from base64.
-function decode(data)
+function _M.decode(data)
     data = string.gsub(data, '[^' .. INDEX_TABLE .. '=]', '')
     return (data:gsub('.', function(x)
         if (x == '=') then return '' end

@@ -9,7 +9,7 @@ local IPV6_MATCH_STR = "^(%x%x%x%x):(%x%x%x%x):(%x%x%x%x):(%x%x%x%x):(%x%x%x%x):
 function make_bitmask(n)
     if n <= 0 then
         return 0
-    if n == 1 then
+    elseif n == 1 then
         return 1
     else
         return bit.bor(bit.lshift(1, n), make_bitmask(n - 1))
@@ -71,14 +71,14 @@ function clip_cidr_v4(addr, level)
     if level == 32 then
         return addr
     -- if 0 or negative return 0.0.0.0/0
-    if level <= 0 then
+    elseif level <= 0 then
         addr[1] = 0
         addr[2] = 0
         addr[3] = 0
         addr[4] = 0
         return addr
     -- if we're below /32, start doing bit shift stuff
-    else if level < 32 then
+    elseif level < 32 then
         -- figure out how much of each digit we have to cover
         local sublevel = level % 8
         -- create a bit mask to AND with once we deal with each sublevel
@@ -93,11 +93,11 @@ function clip_cidr_v4(addr, level)
             addr[3] = 0
             addr[4] = 0
             addr[1] = bit.band(addr[1], mask)
-        else if level <= 16 then
+        elseif level <= 16 then
             addr[3] = 0
             addr[4] = 0
             addr[2] = bit.band(addr[2], mask)
-        else if level <= 24 then
+        elseif level <= 24 then
             addr[4] = 0
             addr[3] = bit.band(addr[3], mask)
         else
